@@ -2,31 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using InstantGram.Core.Insterface;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace InstantGram.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     public class PostController : ControllerBase
     {
+        private IPostService postService;
 
-        private readonly ILogger<PostController> _logger;
-
-        public PostController(ILogger<PostController> logger)
+        public PostController(IPostService postService)
         {
-            this._logger = logger;
+            this.postService = postService;
         }
 
-        public ActionResult<List<string>> Get()
+        [HttpGet("{userId}")]
+        public IActionResult GetAllNewPosts(int userId)
         {
-            return Ok(new List<string>() { "Value 1", "Value 2" });
-        }
-
-        public ActionResult<List<string>> GetAllNewPost()
-        {
-            this
+            var response = this.postService.GetAllNewPostByUser(userId);
+            return Ok(response);
         }
     }
 }

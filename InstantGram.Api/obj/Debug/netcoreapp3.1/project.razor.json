@@ -20498,7 +20498,7 @@
     ],
     "CSharpLanguageVersion": 800
   },
-  "RootNamespace": "InstantGram.Api",
+  "RootNamespace": null,
   "Documents": [],
   "SerializationFormat": "0.2"
 }
