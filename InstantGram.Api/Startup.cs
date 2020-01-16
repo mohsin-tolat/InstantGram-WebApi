@@ -6,6 +6,7 @@ using InstantGram.Api.Configuration;
 using InstantGram.Core.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Core.Service;
+using InstantGram.Data.DbContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,12 +31,12 @@ namespace InstantGram.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-        services.AddControllers();
+            services.AddControllers();
             services.ConfigureDependency();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory, ApplicationDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +53,12 @@ namespace InstantGram.Api
             {
                 endpoints.MapControllers();
             });
+
+            if (env.IsDevelopment())
+            {
+                // var context = app.ApplicationServices.GetService<ApplicationDbContext>();
+                DummyDataProvider.AddSeedData(context);
+            }
         }
     }
 }

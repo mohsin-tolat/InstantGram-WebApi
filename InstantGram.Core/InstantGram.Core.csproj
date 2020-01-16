@@ -24,6 +24,9 @@
       <None Update=".\DummyPosts.json">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update=".\DummyUser.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
   </ItemGroup>
 
   <PropertyGroup>

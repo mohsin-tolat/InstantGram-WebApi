@@ -1,9 +1,8 @@
 using System;
-using System.Collections.Generic;
 
 namespace InstantGram.Data.DBmodels
 {
-    public class Post
+    public class PostDto
     {
         public int Id { get; set; }
 
@@ -15,6 +14,7 @@ namespace InstantGram.Data.DBmodels
 
         public DateTime UploadOn { get; set; }
 
-        public ICollection<PostLike> PostLikes { get; set; }
+        public int TotalLikes { get; set; }
+
     }
 }

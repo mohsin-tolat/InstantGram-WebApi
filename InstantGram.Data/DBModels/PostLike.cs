@@ -13,5 +13,7 @@ namespace InstantGram.Data.DBmodels
         public int LikeBy { get; set; }
 
         public User User { get; set; }
+
+        public Post Post { get; set; }
     }
 }

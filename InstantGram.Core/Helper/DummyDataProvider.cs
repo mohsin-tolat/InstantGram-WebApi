@@ -15,6 +15,7 @@ namespace InstantGram.Core.Helper
 
             try
             {
+                AddUserSeedData(context);
                 AddPostSeedData(context);
                 AddPostLikeSeedData(context);
                 context.SaveChanges();
@@ -23,6 +24,13 @@ namespace InstantGram.Core.Helper
             {
                 throw;
             }
+        }
+
+        private static void AddUserSeedData(ApplicationDbContext context)
+        {
+            var response = ReadFile("DummyUser.json");
+            var seedPostData = JsonConvert.DeserializeObject<List<User>>(response);
+            context.User.AddRange(seedPostData);
         }
 
         public static void AddPostSeedData(ApplicationDbContext context)

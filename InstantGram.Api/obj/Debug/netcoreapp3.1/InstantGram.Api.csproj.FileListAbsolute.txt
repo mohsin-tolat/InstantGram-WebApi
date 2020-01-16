@@ -38,3 +38,4 @@ C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Api\obj\Debug\netco
 C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Api\obj\Debug\netcoreapp3.1\InstantGram.Api.csproj.CopyComplete
 C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Api\obj\Debug\netcoreapp3.1\InstantGram.Api.dll
 C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Api\obj\Debug\netcoreapp3.1\InstantGram.Api.pdb
+C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Api\bin\Debug\netcoreapp3.1\DummyUser.json

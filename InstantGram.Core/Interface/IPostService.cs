@@ -5,6 +5,6 @@ namespace InstantGram.Core.Insterface
 {
     public interface IPostService
     {
-        List<Post> GetAllNewPostByUser(int userId);
+        List<PostDto> GetAllNewPostByUser(int userId);
     }
 }

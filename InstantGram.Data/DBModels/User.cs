@@ -11,5 +11,7 @@ namespace InstantGram.Data.DBmodels
         public string LastName { get; set; }
 
         public ICollection<Post> Posts { get; set; }
+        
+        public ICollection<PostLike> PostLikes { get; set; }
     }
 }
