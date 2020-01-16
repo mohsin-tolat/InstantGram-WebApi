@@ -32,6 +32,12 @@ namespace InstantGram.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("defaultCorsPolicy", builder => builder.AllowAnyOrigin());
+            });
+
             services.ConfigureDependency();
         }
 
@@ -42,6 +48,8 @@ namespace InstantGram.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("defaultCorsPolicy");
 
             // app.UseHttpsRedirection();
 

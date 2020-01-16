@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using InstantGram.Core.Insterface;
@@ -28,7 +29,8 @@ namespace InstantGram.Core.Service
                 ContentLink = x.ContentLink,
                 TotalLikes = x.PostLikes.Count(),
                 UploadBy = x.UploadBy,
-                UploadOn = x.UploadOn
+                UploadOn = x.UploadOn,
+                UploadedByUserName = x.User.Username,
             }).ToList();
 
             this.logger.LogDebug("GetAllNewPostByUser End");
