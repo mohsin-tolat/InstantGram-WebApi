@@ -392,7 +392,7 @@
           "lib/netstandard2.0/Serilog.dll": {}
         }
       },
-      "Serilog.AspNetCore/3.1.0": {
+      "Serilog.AspNetCore/3.2.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.AspNetCore.Hosting.Abstractions": "2.0.0",
@@ -982,7 +982,7 @@
           "Microsoft.EntityFrameworkCore.InMemory": "3.1.0",
           "Newtonsoft.Json": "12.0.3",
           "Serilog": "2.9.0",
-          "Serilog.AspNetCore": "3.1.0",
+          "Serilog.AspNetCore": "3.2.0",
           "Serilog.Extensions.Hosting": "3.0.0",
           "Serilog.Sinks.Console": "3.1.1",
           "Serilog.Sinks.File": "4.1.0"
@@ -1537,16 +1537,16 @@
         "serilog.nuspec"
       ]
     },
-    "Serilog.AspNetCore/3.1.0": {
-      "sha512": "wnQhyRTLGxuViTn7cvhuxEeeS7+O9LWUa5MIV2xUVy1r4aOaQ19Z0yWRQVexl7B+WlgjjOoTfG4CuOcjlXu+7A==",
+    "Serilog.AspNetCore/3.2.0": {
+      "sha512": "czf8pscd+CaS4U1gXC48S9EX1h9sRjfLc7MeQa+JeutGF1IGfmELsl3dCYmojZ4/NgxCXv0VnQnbQchXhyA84w==",
       "type": "package",
-      "path": "serilog.aspnetcore/3.1.0",
+      "path": "serilog.aspnetcore/3.2.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "lib/netstandard2.0/Serilog.AspNetCore.dll",
         "lib/netstandard2.0/Serilog.AspNetCore.xml",
-        "serilog.aspnetcore.3.1.0.nupkg.sha512",
+        "serilog.aspnetcore.3.2.0.nupkg.sha512",
         "serilog.aspnetcore.nuspec"
       ]
     },
