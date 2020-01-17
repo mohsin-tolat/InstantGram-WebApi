@@ -1,8 +1,0 @@
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\bin\Debug\netstandard2.0\InstantGram.Data.deps.json
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\bin\Debug\netstandard2.0\InstantGram.Data.dll
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\bin\Debug\netstandard2.0\InstantGram.Data.pdb
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\obj\Debug\netstandard2.0\InstantGram.Data.AssemblyInfoInputs.cache
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\obj\Debug\netstandard2.0\InstantGram.Data.AssemblyInfo.cs
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\obj\Debug\netstandard2.0\InstantGram.Data.dll
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\obj\Debug\netstandard2.0\InstantGram.Data.pdb
-C:\Mohsin\Practice\Web Api\.Net Core\InstantGram\InstantGram.Data\obj\Debug\netstandard2.0\InstantGram.Data.csprojAssemblyReference.cache
