@@ -18,15 +18,22 @@ namespace InstantGram.Data.DBmodels
 
         public string UploadedByUserName { get; set; }
 
+        private string _uploadedUserAvatar { get; set; }
+
         public string UploadedUserAvatar
         {
             get
             {
+                if (!string.IsNullOrWhiteSpace(_uploadedUserAvatar))
+                {
+                    return this._uploadedUserAvatar;
+                }
+
                 return string.Format("https://gravatar.com/avatar/{0}?s=400&d=robohash&r=x", this.GetRandomString());
             }
             set
             {
-                value = string.Empty;
+                this._uploadedUserAvatar = value;
             }
         }
 

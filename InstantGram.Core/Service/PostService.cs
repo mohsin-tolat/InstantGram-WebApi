@@ -17,10 +17,9 @@ namespace InstantGram.Core.Service
         {
             this.logger = logger;
             this.context = context;
-
         }
 
-        public List<PostDto> GetAllNewPostByUser(int userId)
+        public PagedResult<PostDto> GetAllNewPostByUser(int userId, int pageNo, int pageSize)
         {
             this.logger.LogDebug("GetAllNewPostByUser Started");
             var allPosts = this.context.Post.Select(x => new PostDto()
@@ -31,7 +30,7 @@ namespace InstantGram.Core.Service
                 UploadBy = x.UploadBy,
                 UploadOn = x.UploadOn,
                 UploadedByUserName = x.User.Username,
-            }).ToList();
+            }).GetPaged<PostDto>(pageNo, pageSize);
 
             this.logger.LogDebug("GetAllNewPostByUser End");
             return allPosts;
