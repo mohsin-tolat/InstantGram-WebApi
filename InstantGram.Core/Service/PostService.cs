@@ -4,6 +4,7 @@ using System.Linq;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DbContexts;
 using InstantGram.Data.DBmodels;
+using InstantGram.Data.DTOModels;
 using Microsoft.Extensions.Logging;
 
 namespace InstantGram.Core.Service

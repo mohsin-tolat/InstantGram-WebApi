@@ -35,7 +35,7 @@ namespace InstantGram.Api
 
             services.AddCors(options =>
             {
-                options.AddPolicy("defaultCorsPolicy", builder => builder.AllowAnyOrigin());
+                options.AddPolicy("defaultCorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
             services.ConfigureDependency();

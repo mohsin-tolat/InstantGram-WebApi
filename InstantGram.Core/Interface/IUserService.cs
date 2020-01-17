@@ -4,8 +4,8 @@ using InstantGram.Data.DTOModels;
 
 namespace InstantGram.Core.Insterface
 {
-    public interface IPostService
+    public interface IUserService
     {
-        PagedResult<PostDto> GetAllNewPostByUser(int userId, int pageNo, int pageSize);
+        bool AddNewUser(UserRegistration registrationDetails);
     }
 }

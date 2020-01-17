@@ -1,6 +1,7 @@
 using System;
+using InstantGram.Data.DBmodels;
 
-namespace InstantGram.Data.DBmodels
+namespace InstantGram.Data.DTOModels
 {
     public class PostDto
     {

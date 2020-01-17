@@ -12,8 +12,14 @@ namespace InstantGram.Data.DBmodels
 
         public string Username { get; set; }
 
+        public string EmailAddress { get; set; }
+
+        public string PasswordHash { get; set; }
+
+        public string PasswordSalt { get; set; }
+
         public ICollection<Post> Posts { get; set; }
-        
+
         public ICollection<PostLike> PostLikes { get; set; }
     }
 }
