@@ -46,7 +46,8 @@ namespace InstantGram.Core.Service
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                    new Claim(ClaimTypes.Name, userDetails.Username)
+                        new Claim(ClaimTypes.SerialNumber, userDetails.Id.ToString()),
+                        new Claim(ClaimTypes.Name, userDetails.Username)
                     }),
                     Expires = DateTime.UtcNow.AddDays(7),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricSecurityKey), SecurityAlgorithms.HmacSha256)

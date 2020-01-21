@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace InstantGram.Data.DBmodels
@@ -17,6 +18,8 @@ namespace InstantGram.Data.DBmodels
         public string PasswordHash { get; set; }
 
         public string PasswordSalt { get; set; }
+
+        public DateTime DateOfJoining { get; set; }
 
         public ICollection<Post> Posts { get; set; }
 

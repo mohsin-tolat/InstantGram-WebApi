@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InstantGram.Core.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DbContexts;
 using InstantGram.Data.DBmodels;
@@ -35,6 +36,22 @@ namespace InstantGram.Core.Service
 
             this.logger.LogDebug("GetAllNewPostByUser End");
             return allPosts;
+        }
+
+        public bool LikePost(int currentUserId, int postId)
+        {
+            if (!this.context.PostLike.Any(x => x.LikeBy == currentUserId && x.PostId == postId))
+            {
+                this.context.PostLike.Add(new PostLike()
+                {
+                    LikeBy = currentUserId,
+                    PostId = postId,
+                    LikeOn = CommonUtilities.GetCurrentDateTime()
+                });
+                return this.context.SaveChanges() > 0;
+            }
+
+            return true;
         }
     }
 }

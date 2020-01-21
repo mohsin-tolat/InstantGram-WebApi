@@ -20,5 +20,10 @@ namespace InstantGram.Core.Helper
             var saltedHash = hmacMD5.ComputeHash(password);
             return Convert.ToBase64String(saltedHash);
         }
+
+        public static DateTime GetCurrentDateTime()
+        {
+            return DateTime.UtcNow;
+        }
     }
 }

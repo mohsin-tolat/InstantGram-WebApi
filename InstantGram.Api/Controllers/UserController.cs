@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InstantGram.Core.Insterface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace InstantGram.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
@@ -22,6 +24,7 @@ namespace InstantGram.Api.Controllers
             this.logger = logger;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public IActionResult AddNewUser([FromBody] UserRegistration userDetails)
         {
