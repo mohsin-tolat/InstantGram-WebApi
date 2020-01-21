@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 
 namespace InstantGram.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class LoginController : ControllerBase
@@ -45,6 +46,12 @@ namespace InstantGram.Api.Controllers
                 this.logger.LogError(ex, "Error occurred in Authentication");
                 throw;
             }
+        }
+
+        [HttpGet]
+        public IActionResult CheckAuthorization()
+        {
+            return Ok(true);
         }
     }
 }
