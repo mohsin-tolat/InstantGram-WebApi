@@ -595,8 +595,10 @@
   },
   {
     "Id": 100,
-    "FirstName": "Shannah",
-    "LastName": "Priter",
-    "Username": "spriter2r"
+    "FirstName": "Mohsin",
+    "LastName": "Tolat",
+    "Username": "mohsin.tolat771",
+    "PasswordHash": "PUWdKBiCA5LmyG9/Qqkq1Q==",
+    "PasswordSalt": "596fbad6a77a428eb1d093db60ce02e3"
   }
 ]

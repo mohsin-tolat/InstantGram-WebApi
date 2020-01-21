@@ -12,6 +12,8 @@ namespace InstantGram.Api.Configuration
         {
             services.AddTransient<IPostService, PostService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<ILoginService, LoginService>();
+            
 
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("ApplicationDbContext"));
         }

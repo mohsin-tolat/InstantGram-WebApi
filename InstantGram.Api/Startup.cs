@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InstantGram.Api.Configuration;
+using InstantGram.Api.Models;
 using InstantGram.Core.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Core.Service;
@@ -38,6 +39,11 @@ namespace InstantGram.Api
                 options.AddPolicy("defaultCorsPolicy", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             });
 
+            // configure strongly typed settings objects
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            services.ConfigureJwtAuthentication(appSettingsSection);
+
             services.ConfigureDependency();
         }
 
@@ -55,6 +61,7 @@ namespace InstantGram.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
