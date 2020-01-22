@@ -39,7 +39,7 @@ namespace InstantGram.Core.Service
             return allPosts;
         }
 
-        public bool LikeDislikePost(int currentUserId, int postId)
+        public PostDto LikeDislikePost(int currentUserId, int postId)
         {
             var postDetails = this.context.Post.Include(x => x.PostLikes)
                                                .Include(x => x.User)
@@ -48,7 +48,7 @@ namespace InstantGram.Core.Service
 
             if (postDetails == null)
             {
-                return false;
+                return null;
             }
 
             if (!postDetails.PostLikes.Any(x => x.LikeBy == currentUserId))
@@ -62,10 +62,23 @@ namespace InstantGram.Core.Service
             }
             else
             {
-                this.context.PostLike.RemoveRange(postDetails.PostLikes.Where(x => x.LikeBy == currentUserId).ToList());
+                if (postDetails.PostLikes.Any(x => x.LikeBy == currentUserId))
+                {
+                    this.context.PostLike.RemoveRange(postDetails.PostLikes.Where(x => x.LikeBy == currentUserId).ToList());
+                }
             }
 
-            return this.context.SaveChanges() > 0;
+            this.context.SaveChanges();
+
+            return new PostDto()
+            {
+                Id = postDetails.Id,
+                ContentLink = postDetails.ContentLink,
+                TotalLikes = postDetails.PostLikes.Count(),
+                UploadBy = postDetails.UploadBy,
+                UploadOn = postDetails.UploadOn,
+                UploadedByUserName = postDetails.User.Username,
+            };
         }
     }
 }

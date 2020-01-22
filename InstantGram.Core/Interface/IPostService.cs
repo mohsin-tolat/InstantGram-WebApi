@@ -8,6 +8,7 @@ namespace InstantGram.Core.Insterface
     public interface IPostService
     {
         PagedResult<PostDto> GetAllNewPostByUser(int userId, int pageNo, int pageSize);
-        bool LikeDislikePost(int currentUserId, int postId);
+
+        PostDto LikeDislikePost(int currentUserId, int postId);
     }
 }

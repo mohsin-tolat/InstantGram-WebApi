@@ -44,7 +44,7 @@ namespace InstantGram.Api.Controllers
             catch (System.Exception ex)
             {
                 this.logger.LogError(ex, "Error occurred in Authentication");
-                throw;
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
             }
         }
 

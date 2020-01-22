@@ -8,7 +8,7 @@ namespace InstantGram.Common.Helper
     public static class EncryptionHelper
     {
 
-        public const string ENCRYPTION_KEY = "YX&%k?St7YMG!#E";
+        public const string ENCRYPTION_KEY = "C&F)J@NcRfUjMn2r";
 
         public static string ToEncrypt(this object plainText)
         {

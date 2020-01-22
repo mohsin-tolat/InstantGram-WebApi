@@ -41,7 +41,7 @@ namespace InstantGram.Api.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Error Occurred in AddNewUser");
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return BadRequest();
             }
         }
     }

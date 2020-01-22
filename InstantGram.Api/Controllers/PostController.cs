@@ -43,14 +43,25 @@ namespace InstantGram.Api.Controllers
         [HttpPost("{postId}")]
         public IActionResult LikeDislikePost(int postId)
         {
-            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
-            if (currentUserDetails.UserId > 0)
+            try
             {
-                var response = this.postService.LikeDislikePost(currentUserDetails.UserId, postId);
-                return Ok(response);
-            }
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId > 0)
+                {
+                    var response = this.postService.LikeDislikePost(currentUserDetails.UserId, postId);
+                    if (response != null)
+                    {
+                        return Ok(response);
+                    }
+                }
 
-            return BadRequest();
+                return BadRequest();
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error occurred in Like Dislike post.");
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
+            }
         }
     }
 }
