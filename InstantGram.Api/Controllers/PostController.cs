@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using InstantGram.Common.Domain.Interface;
 using InstantGram.Core.Insterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,23 @@ namespace InstantGram.Api.Controllers
     public class PostController : ControllerBase
     {
         private IPostService postService;
+        private readonly ILogger<PostController> logger;
+        private readonly IUserResolverService userResolverService;
 
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, ILogger<PostController> logger, IUserResolverService userResolverService)
         {
             this.postService = postService;
+            this.logger = logger;
+            this.userResolverService = userResolverService;
         }
 
         [HttpGet]
         public IActionResult GetAllNewPosts([FromQuery] int pageNo = 1, [FromQuery]int pageSize = 10)
         {
-            var userIdClaimValue = this.User.Claims.Where(x => x.Type == ClaimTypes.SerialNumber).Select(x => x.Value).FirstOrDefault();
-            if (int.TryParse(userIdClaimValue, out int currentUserId) && currentUserId > 0)
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+            if (currentUserDetails.UserId > 0)
             {
-                var response = this.postService.GetAllNewPostByUser(currentUserId, pageNo, pageSize);
+                var response = this.postService.GetAllNewPostByUser(currentUserDetails.UserId, pageNo, pageSize);
                 return Ok(response);
             }
 
@@ -38,10 +43,10 @@ namespace InstantGram.Api.Controllers
         [HttpPost("{postId}")]
         public IActionResult LikeDislikePost(int postId)
         {
-            var userIdClaimValue = this.User.Claims.Where(x => x.Type == ClaimTypes.SerialNumber).Select(x => x.Value).FirstOrDefault();
-            if (int.TryParse(userIdClaimValue, out int currentUserId) && currentUserId > 0)
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+            if (currentUserDetails.UserId > 0)
             {
-                var response = this.postService.LikeDislikePost(currentUserId, postId);
+                var response = this.postService.LikeDislikePost(currentUserDetails.UserId, postId);
                 return Ok(response);
             }
 

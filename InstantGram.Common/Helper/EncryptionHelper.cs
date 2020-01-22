@@ -10,9 +10,9 @@ namespace InstantGram.Common.Helper
 
         public const string ENCRYPTION_KEY = "YX&%k?St7YMG!#E";
 
-        public static string ToEncrypt(this object text)
+        public static string ToEncrypt(this object plainText)
         {
-            if (text != null && string.IsNullOrWhiteSpace(text.ToString()))
+            if (plainText != null && string.IsNullOrWhiteSpace(plainText.ToString()))
             {
                 return string.Empty;
             }
@@ -29,7 +29,7 @@ namespace InstantGram.Common.Helper
                         {
                             using (var sw = new StreamWriter(cs))
                             {
-                                sw.Write(text);
+                                sw.Write(plainText);
                             }
                         }
 
@@ -48,14 +48,14 @@ namespace InstantGram.Common.Helper
             }
         }
 
-        public static string ToDecrypt(this string encrypted)
+        public static string ToDecrypt(this string encryptedText)
         {
-            if (string.IsNullOrWhiteSpace(encrypted))
+            if (string.IsNullOrWhiteSpace(encryptedText))
             {
-                return encrypted;
+                return encryptedText;
             }
 
-            var b = Convert.FromBase64String(encrypted);
+            var b = Convert.FromBase64String(encryptedText);
 
             var iv = new byte[16];
             var cipher = new byte[16];
