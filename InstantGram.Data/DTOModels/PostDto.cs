@@ -17,6 +17,8 @@ namespace InstantGram.Data.DTOModels
 
         public int TotalLikes { get; set; }
 
+        public bool IsCurrentUserLikedPost { get; set; }
+
         public string UploadedByUserName { get; set; }
 
         private string _uploadedUserAvatar { get; set; }

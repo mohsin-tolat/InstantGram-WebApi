@@ -33,6 +33,7 @@ namespace InstantGram.Core.Service
                 UploadBy = x.UploadBy,
                 UploadOn = x.UploadOn,
                 UploadedByUserName = x.User.Username,
+                IsCurrentUserLikedPost = x.PostLikes.Any(z => z.LikeBy == userId)
             }).GetPaged<PostDto>(pageNo, pageSize);
 
             this.logger.LogDebug("GetAllNewPostByUser End");
@@ -78,6 +79,7 @@ namespace InstantGram.Core.Service
                 UploadBy = postDetails.UploadBy,
                 UploadOn = postDetails.UploadOn,
                 UploadedByUserName = postDetails.User.Username,
+                IsCurrentUserLikedPost = postDetails.PostLikes.Any(z => z.LikeBy == currentUserId)
             };
         }
     }
