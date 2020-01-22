@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InstantGram.Core.Helper;
+using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DbContexts;
 using InstantGram.Data.DBmodels;

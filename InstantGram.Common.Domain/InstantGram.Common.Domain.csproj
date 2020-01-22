@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.0" />
@@ -15,13 +19,20 @@
   </ItemGroup>
 
   <ItemGroup>
+      <None Update=".\DummyPostLike.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update=".\DummyPosts.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update=".\DummyUser.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\InstantGram.Data\InstantGram.Data.csproj" />
     <ProjectReference Include="..\InstantGram.Common\InstantGram.Common.csproj" />
-    <ProjectReference Include="..\InstantGram.Common.Domain\InstantGram.Common.Domain.csproj" />
   </ItemGroup>
-  
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
 
 </Project>

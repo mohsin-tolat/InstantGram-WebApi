@@ -22,7 +22,7 @@ namespace InstantGram.Api.Controllers
             this.postService = postService;
         }
 
-        [HttpGet()]
+        [HttpGet]
         public IActionResult GetAllNewPosts([FromQuery] int pageNo = 1, [FromQuery]int pageSize = 10)
         {
             var userIdClaimValue = this.User.Claims.Where(x => x.Type == ClaimTypes.SerialNumber).Select(x => x.Value).FirstOrDefault();
@@ -36,12 +36,12 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpPost("{postId}")]
-        public IActionResult LikePost(int postId)
+        public IActionResult LikeDislikePost(int postId)
         {
             var userIdClaimValue = this.User.Claims.Where(x => x.Type == ClaimTypes.SerialNumber).Select(x => x.Value).FirstOrDefault();
             if (int.TryParse(userIdClaimValue, out int currentUserId) && currentUserId > 0)
             {
-                var response = this.postService.LikePost(currentUserId, postId);
+                var response = this.postService.LikeDislikePost(currentUserId, postId);
                 return Ok(response);
             }
 

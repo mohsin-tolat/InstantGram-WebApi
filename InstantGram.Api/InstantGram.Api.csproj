@@ -28,6 +28,8 @@
   <ItemGroup>
     <ProjectReference Include="..\InstantGram.Core\InstantGram.Core.csproj" />
     <ProjectReference Include="..\InstantGram.Data\InstantGram.Data.csproj" />
+    <ProjectReference Include="..\InstantGram.Common\InstantGram.Common.csproj" />
+    <ProjectReference Include="..\InstantGram.Common.Domain\InstantGram.Common.Domain.csproj" />
   </ItemGroup>
 
 

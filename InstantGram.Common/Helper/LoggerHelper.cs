@@ -4,7 +4,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Serilog;
 
-namespace InstantGram.Core.Helper
+namespace InstantGram.Common.Helper
 {
     public static class LoggerHelper
     {

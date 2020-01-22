@@ -1,7 +1,9 @@
 using System;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 
-namespace InstantGram.Core.Helper
+namespace InstantGram.Common.Helper
 {
     public static class CommonUtilities
     {
@@ -25,5 +27,7 @@ namespace InstantGram.Core.Helper
         {
             return DateTime.UtcNow;
         }
+
+        
     }
 }

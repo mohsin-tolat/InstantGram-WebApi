@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="3.1.0" />
@@ -13,15 +17,5 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.6.0" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\InstantGram.Data\InstantGram.Data.csproj" />
-    <ProjectReference Include="..\InstantGram.Common\InstantGram.Common.csproj" />
-    <ProjectReference Include="..\InstantGram.Common.Domain\InstantGram.Common.Domain.csproj" />
-  </ItemGroup>
-  
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-  </PropertyGroup>
 
 </Project>

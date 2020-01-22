@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InstantGram.Core.Helper;
+using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DbContexts;
 using InstantGram.Data.DBmodels;
 using InstantGram.Data.DTOModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace InstantGram.Core.Service
@@ -38,9 +39,19 @@ namespace InstantGram.Core.Service
             return allPosts;
         }
 
-        public bool LikePost(int currentUserId, int postId)
+        public bool LikeDislikePost(int currentUserId, int postId)
         {
-            if (!this.context.PostLike.Any(x => x.LikeBy == currentUserId && x.PostId == postId))
+            var postDetails = this.context.Post.Include(x => x.PostLikes)
+                                               .Include(x => x.User)
+                                               .Where(x => x.Id == postId)
+                                               .FirstOrDefault();
+
+            if (postDetails == null)
+            {
+                return false;
+            }
+
+            if (!postDetails.PostLikes.Any(x => x.LikeBy == currentUserId))
             {
                 this.context.PostLike.Add(new PostLike()
                 {
@@ -48,10 +59,13 @@ namespace InstantGram.Core.Service
                     PostId = postId,
                     LikeOn = CommonUtilities.GetCurrentDateTime()
                 });
-                return this.context.SaveChanges() > 0;
+            }
+            else
+            {
+                this.context.PostLike.RemoveRange(postDetails.PostLikes.Where(x => x.LikeBy == currentUserId).ToList());
             }
 
-            return true;
+            return this.context.SaveChanges() > 0;
         }
     }
 }

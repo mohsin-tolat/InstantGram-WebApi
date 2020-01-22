@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using InstantGram.Data.DBmodels;
 using InstantGram.Data.DbContexts;
 
-namespace InstantGram.Core.Helper
+namespace InstantGram.Common.Domain.Helper
 {
     public static class DummyDataProvider
     {
