@@ -5,14 +5,9 @@ using System.Threading.Tasks;
 using InstantGram.Api.Configuration;
 using InstantGram.Api.Models;
 using InstantGram.Common.Domain.Helper;
-using InstantGram.Common.Helper;
-using InstantGram.Core.Insterface;
-using InstantGram.Core.Service;
-using InstantGram.Data.DbContexts;
+using InstantGram.Data.DBContexts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -45,7 +40,7 @@ namespace InstantGram.Api
             services.Configure<AppSettings>(appSettingsSection);
             services.ConfigureJwtAuthentication(appSettingsSection);
 
-            services.ConfigureDependency();
+            services.ConfigureDependency(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

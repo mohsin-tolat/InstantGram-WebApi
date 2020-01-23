@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-using InstantGram.Data.DBmodels;
-using InstantGram.Data.DbContexts;
+using InstantGram.Data.DBContexts;
+using InstantGram.Data.DBModels;
 
 namespace InstantGram.Common.Domain.Helper
 {

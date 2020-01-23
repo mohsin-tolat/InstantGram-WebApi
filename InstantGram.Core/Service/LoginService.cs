@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
-using InstantGram.Data.DbContexts;
-using InstantGram.Data.DBmodels;
 using InstantGram.Data.DTOModels;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,7 +10,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-
+using InstantGram.Data.DBContexts;
 
 namespace InstantGram.Core.Service
 {

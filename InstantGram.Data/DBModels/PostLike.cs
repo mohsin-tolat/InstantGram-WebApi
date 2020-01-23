@@ -1,19 +1,16 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
 
-namespace InstantGram.Data.DBmodels
+namespace InstantGram.Data.DBModels
 {
-    public class PostLike
+    public partial class PostLike
     {
         public int Id { get; set; }
-
         public int PostId { get; set; }
-        
+        public int LikeByUserId { get; set; }
         public DateTime LikeOn { get; set; }
 
-        public int LikeBy { get; set; }
-
-        public User User { get; set; }
-
-        public Post Post { get; set; }
+        public virtual User LikeByUser { get; set; }
+        public virtual Post Post { get; set; }
     }
 }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using InstantGram.Common.Helper;
-using InstantGram.Data.DBmodels;
 using InstantGram.Data.DTOModels;
 
 namespace InstantGram.Core.Insterface

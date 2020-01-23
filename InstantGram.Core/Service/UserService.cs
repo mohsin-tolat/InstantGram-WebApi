@@ -4,8 +4,8 @@ using System.Linq;
 using System.Security.Cryptography;
 using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
-using InstantGram.Data.DbContexts;
-using InstantGram.Data.DBmodels;
+using InstantGram.Data.DBContexts;
+using InstantGram.Data.DBModels;
 using InstantGram.Data.DTOModels;
 using Microsoft.Extensions.Logging;
 

@@ -1,6 +1,6 @@
 using System;
 using InstantGram.Common.Helper;
-using InstantGram.Data.DBmodels;
+
 using Newtonsoft.Json;
 
 namespace InstantGram.Data.DTOModels
@@ -13,7 +13,7 @@ namespace InstantGram.Data.DTOModels
         public string UserName { get; set; }
 
         public string EmailAddress { get; set; }
-        
+
         public string UserHashId
         {
             get

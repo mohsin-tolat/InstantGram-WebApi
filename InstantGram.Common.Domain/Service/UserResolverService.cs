@@ -1,7 +1,7 @@
 using System.Linq;
 using System.Security.Claims;
 using InstantGram.Common.Domain.Interface;
-using InstantGram.Data.DbContexts;
+using InstantGram.Data.DBContexts;
 using InstantGram.Data.DTOModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

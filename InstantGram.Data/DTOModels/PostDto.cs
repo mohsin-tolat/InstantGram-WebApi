@@ -1,5 +1,5 @@
 using System;
-using InstantGram.Data.DBmodels;
+using InstantGram.Data.DBModels;
 
 namespace InstantGram.Data.DTOModels
 {
