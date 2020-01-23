@@ -7,6 +7,7 @@ namespace InstantGram.Data.DBModels
     {
         public User()
         {
+            Post = new HashSet<Post>();
             PostLike = new HashSet<PostLike>();
         }
 
@@ -18,7 +19,9 @@ namespace InstantGram.Data.DBModels
         public string PasswordHash { get; set; }
         public string PasswordSalt { get; set; }
         public DateTime DateOfJoining { get; set; }
+        public string UserAvatar { get; set; }
 
+        public virtual ICollection<Post> Post { get; set; }
         public virtual ICollection<PostLike> PostLike { get; set; }
     }
 }

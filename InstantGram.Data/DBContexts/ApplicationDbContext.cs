@@ -24,6 +24,7 @@ namespace InstantGram.Data.DBContexts
         {
             if (!optionsBuilder.IsConfigured)
             {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseSqlServer("Server=PMCLAP1349\\SQLEXPRESS;Database=InstantGram_V001;User Id=sa;Password=India@123;");
             }
         }
@@ -38,6 +39,11 @@ namespace InstantGram.Data.DBContexts
                     .IsUnicode(false);
 
                 entity.Property(e => e.UploadOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.UploadByUser)
+                    .WithMany(p => p.Post)
+                    .HasForeignKey(d => d.UploadByUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<PostLike>(entity =>
@@ -46,8 +52,7 @@ namespace InstantGram.Data.DBContexts
 
                 entity.HasOne(d => d.LikeByUser)
                     .WithMany(p => p.PostLike)
-                    .HasForeignKey(d => d.LikeByUserId)
-                    .HasConstraintName("FK_PostLike_User");
+                    .HasForeignKey(d => d.LikeByUserId);
 
                 entity.HasOne(d => d.Post)
                     .WithMany(p => p.PostLike)
@@ -81,6 +86,10 @@ namespace InstantGram.Data.DBContexts
                 entity.Property(e => e.PasswordSalt)
                     .IsRequired()
                     .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UserAvatar)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Username)

@@ -19,7 +19,7 @@ namespace InstantGram.Api.Configuration
             services.AddTransient<ILoginService, LoginService>();
             services.AddTransient<IUserResolverService, UserResolverService>();
 
-
+            var connectionString = databaseConfiguration.GetConnectionString("InstantGramDbContext");
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(databaseConfiguration.GetConnectionString("InstantGramDbContext")));
         }
     }

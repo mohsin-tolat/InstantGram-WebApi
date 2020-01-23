@@ -11,10 +11,11 @@ namespace InstantGram.Data.DBModels
         }
 
         public int Id { get; set; }
-        public int UploadBy { get; set; }
+        public int UploadByUserId { get; set; }
         public string ContentLink { get; set; }
         public DateTime UploadOn { get; set; }
 
+        public virtual User UploadByUser { get; set; }
         public virtual ICollection<PostLike> PostLike { get; set; }
     }
 }

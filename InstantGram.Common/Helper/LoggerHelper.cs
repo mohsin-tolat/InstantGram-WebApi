@@ -13,7 +13,7 @@ namespace InstantGram.Common.Helper
             Log.Logger = new LoggerConfiguration()
                             .MinimumLevel.Debug()
                             .WriteTo.Console()
-                            .WriteTo.File("Logs\\Logs-{Date}.log")
+                            .WriteTo.RollingFile("Logs\\Logs-{Date}.log")
                             .CreateLogger();
 
         }

@@ -30,9 +30,9 @@ namespace InstantGram.Core.Service
                 Id = x.Id,
                 ContentLink = x.ContentLink,
                 TotalLikes = x.PostLike.Count(),
-                UploadBy = x.UploadBy,
+                UploadBy = x.UploadByUserId,
                 UploadOn = x.UploadOn,
-                // UploadedByUserName = x.User.Username,
+                UploadedByUserName = x.UploadByUser.Username,
                 IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == userId)
             }).GetPaged<PostDto>(pageNo, pageSize);
 
@@ -43,7 +43,7 @@ namespace InstantGram.Core.Service
         public PostDto LikeDislikePost(int currentUserId, int postId)
         {
             var postDetails = this.context.Post.Include(x => x.PostLike)
-                                               //    .Include(x => x.User)
+                                               .Include(x => x.UploadByUser)
                                                .Where(x => x.Id == postId)
                                                .FirstOrDefault();
 
@@ -76,9 +76,9 @@ namespace InstantGram.Core.Service
                 Id = postDetails.Id,
                 ContentLink = postDetails.ContentLink,
                 TotalLikes = postDetails.PostLike.Count(),
-                UploadBy = postDetails.UploadBy,
+                UploadBy = postDetails.UploadByUserId,
                 UploadOn = postDetails.UploadOn,
-                // UploadedByUserName = postDetails.User.Username,
+                UploadedByUserName = postDetails.UploadByUser.Username,
                 IsCurrentUserLikedPost = postDetails.PostLike.Any(z => z.LikeByUserId == currentUserId)
             };
         }
