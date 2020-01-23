@@ -21,28 +21,6 @@ namespace InstantGram.Data.DTOModels
 
         public string UploadedByUserName { get; set; }
 
-        private string _uploadedUserAvatar { get; set; }
-
-        public string UploadedUserAvatar
-        {
-            get
-            {
-                if (!string.IsNullOrWhiteSpace(_uploadedUserAvatar))
-                {
-                    return this._uploadedUserAvatar;
-                }
-
-                return string.Format("https://gravatar.com/avatar/{0}?s=400&d=robohash&r=x", this.GetRandomString());
-            }
-            set
-            {
-                this._uploadedUserAvatar = value;
-            }
-        }
-
-        private string GetRandomString()
-        {
-            return Guid.NewGuid().ToString("N");
-        }
+        public string UploadedUserAvatar { get; set; }
     }
 }

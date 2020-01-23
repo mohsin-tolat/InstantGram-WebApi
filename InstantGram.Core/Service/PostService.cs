@@ -33,6 +33,7 @@ namespace InstantGram.Core.Service
                 UploadBy = x.UploadByUserId,
                 UploadOn = x.UploadOn,
                 UploadedByUserName = x.UploadByUser.Username,
+                UploadedUserAvatar = x.UploadByUser.UserAvatar,
                 IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == userId)
             }).GetPaged<PostDto>(pageNo, pageSize);
 
@@ -79,6 +80,7 @@ namespace InstantGram.Core.Service
                 UploadBy = postDetails.UploadByUserId,
                 UploadOn = postDetails.UploadOn,
                 UploadedByUserName = postDetails.UploadByUser.Username,
+                UploadedUserAvatar = postDetails.UploadByUser.UserAvatar,
                 IsCurrentUserLikedPost = postDetails.PostLike.Any(z => z.LikeByUserId == currentUserId)
             };
         }

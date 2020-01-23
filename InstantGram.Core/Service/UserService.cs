@@ -30,6 +30,8 @@ namespace InstantGram.Core.Service
                 LastName = registrationDetails.LastName,
                 Username = registrationDetails.Username,
                 EmailAddress = registrationDetails.EmailAddress,
+                DateOfJoining = CommonUtilities.GetCurrentDateTime(),
+                UserAvatar = string.Format("https://gravatar.com/avatar/{0}?s=400&d=robohash&r=x", this.GetRandomString())
             };
 
             var passwordSalt = CommonUtilities.GeneratePasswordSalt();
@@ -39,6 +41,11 @@ namespace InstantGram.Core.Service
 
             this.context.User.Add(newUser);
             return context.SaveChanges() > 0;
+        }
+
+        private string GetRandomString()
+        {
+            return Guid.NewGuid().ToString("N");
         }
     }
 }
