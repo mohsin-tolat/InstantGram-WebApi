@@ -9,6 +9,8 @@ namespace InstantGram.Data.DBModels
         {
             Post = new HashSet<Post>();
             PostLike = new HashSet<PostLike>();
+            UserFollowerFollowingUser = new HashSet<UserFollower>();
+            UserFollowerUser = new HashSet<UserFollower>();
         }
 
         public int Id { get; set; }
@@ -23,5 +25,7 @@ namespace InstantGram.Data.DBModels
 
         public virtual ICollection<Post> Post { get; set; }
         public virtual ICollection<PostLike> PostLike { get; set; }
+        public virtual ICollection<UserFollower> UserFollowerFollowingUser { get; set; }
+        public virtual ICollection<UserFollower> UserFollowerUser { get; set; }
     }
 }

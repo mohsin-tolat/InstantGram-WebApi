@@ -19,6 +19,7 @@ namespace InstantGram.Data.DBContexts
         public virtual DbSet<Post> Post { get; set; }
         public virtual DbSet<PostLike> PostLike { get; set; }
         public virtual DbSet<User> User { get; set; }
+        public virtual DbSet<UserFollower> UserFollower { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -96,6 +97,20 @@ namespace InstantGram.Data.DBContexts
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<UserFollower>(entity =>
+            {
+                entity.Property(e => e.DateOfFollowing).HasColumnType("datetime");
+
+                entity.HasOne(d => d.FollowingUser)
+                    .WithMany(p => p.UserFollowerFollowingUser)
+                    .HasForeignKey(d => d.FollowingUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.UserFollowerUser)
+                    .HasForeignKey(d => d.UserId);
             });
 
             OnModelCreatingPartial(modelBuilder);
