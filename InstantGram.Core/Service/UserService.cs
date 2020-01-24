@@ -43,6 +43,30 @@ namespace InstantGram.Core.Service
             return context.SaveChanges() > 0;
         }
 
+        public PagedResult<UserDto> GetUserDetailsBasedOnSearch(int currentUserId, string searchText, int pageNo, int pageSize)
+        {
+            this.logger.LogDebug("GetAllNewPostByUser Started");
+
+            var allUsers = this.context.User.Where(x => string.IsNullOrWhiteSpace(searchText)
+                                                        || (x.FirstName.Contains(searchText)
+                                                        || x.LastName.Contains(searchText)
+                                                        || x.Username.Contains(searchText)))
+                                                        .Select(usr => new UserDto()
+                                                        {
+                                                            FirstName = usr.FirstName,
+                                                            LastName = usr.LastName,
+                                                            Username = usr.Username,
+                                                            EmailAddress = usr.EmailAddress,
+                                                            DateOfJoining = usr.DateOfJoining,
+                                                            UserAvatar = usr.UserAvatar
+                                                            // TODO: Need to check this.
+                                                            // IsAlreadyFollowed=usr.UserFollowerFollowingUser.Any(x=>x.)
+                                                        }).GetPaged<UserDto>(pageNo, pageSize);
+
+            this.logger.LogDebug("GetAllNewPostByUser End");
+            return allUsers;
+        }
+
         private string GetRandomString()
         {
             return Guid.NewGuid().ToString("N");

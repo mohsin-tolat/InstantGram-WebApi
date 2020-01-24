@@ -22,9 +22,31 @@ namespace InstantGram.Core.Service
             this.context = context;
         }
 
-        public PagedResult<PostDto> GetAllNewPostByUser(int userId, int pageNo, int pageSize)
+        public PagedResult<PostDto> GetAllNewPostByUser(int currentLoggedInUserId, int pageNo, int pageSize)
         {
             this.logger.LogDebug("GetAllNewPostByUser Started");
+
+            var allPosts = (from userFollower in this.context.UserFollower.Where(x => x.UserId == currentLoggedInUserId)
+                            join userPosts in this.context.Post on userFollower.FollowingUserId equals userPosts.UploadByUserId
+                            orderby userPosts.UploadOn descending
+                            select new PostDto()
+                            {
+                                Id = userPosts.Id,
+                                ContentLink = userPosts.ContentLink,
+                                TotalLikes = userPosts.PostLike.Count(),
+                                UploadBy = userPosts.UploadByUserId,
+                                UploadOn = userPosts.UploadOn,
+                                UploadedByUserName = userPosts.UploadByUser.Username,
+                                UploadedUserAvatar = userPosts.UploadByUser.UserAvatar,
+                                IsCurrentUserLikedPost = userPosts.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId)
+                            }).GetPaged<PostDto>(pageNo, pageSize);
+
+            this.logger.LogDebug("GetAllNewPostByUser End");
+            return allPosts;
+        }
+
+        public PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize)
+        {
             var allPosts = this.context.Post.Select(x => new PostDto()
             {
                 Id = x.Id,
@@ -34,10 +56,9 @@ namespace InstantGram.Core.Service
                 UploadOn = x.UploadOn,
                 UploadedByUserName = x.UploadByUser.Username,
                 UploadedUserAvatar = x.UploadByUser.UserAvatar,
-                IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == userId)
+                IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId)
             }).GetPaged<PostDto>(pageNo, pageSize);
 
-            this.logger.LogDebug("GetAllNewPostByUser End");
             return allPosts;
         }
 
