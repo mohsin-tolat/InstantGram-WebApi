@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
+using InstantGram.Common.Exceptions;
 using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DBContexts;
 using InstantGram.Data.DBModels;
 using InstantGram.Data.DTOModels;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace InstantGram.Core.Service
@@ -53,23 +54,129 @@ namespace InstantGram.Core.Service
                                                         || x.Username.Contains(searchText)))
                                                         .Select(usr => new UserDto()
                                                         {
+                                                            Id = usr.Id,
                                                             FirstName = usr.FirstName,
                                                             LastName = usr.LastName,
                                                             Username = usr.Username,
                                                             EmailAddress = usr.EmailAddress,
                                                             DateOfJoining = usr.DateOfJoining,
-                                                            UserAvatar = usr.UserAvatar
-                                                            // TODO: Need to check this.
-                                                            // IsAlreadyFollowed=usr.UserFollowerFollowingUser.Any(x=>x.)
+                                                            UserAvatar = usr.UserAvatar,
+                                                            TotalPostCount = usr.Post.Count(),
+                                                            IsAlreadyFollowed = usr.Id == currentUserId || usr.UserFollowerFollowingUser.Any(x => x.UserId == currentUserId)
                                                         }).GetPaged<UserDto>(pageNo, pageSize);
 
             this.logger.LogDebug("GetAllNewPostByUser End");
             return allUsers;
         }
 
+
+
+        public bool FollowUnFollowUser(int currentUserId, int followingUserId, bool isFollow)
+        {
+            var userToFollow = this.context.User.FirstOrDefault(x => x.Id == followingUserId);
+            if (userToFollow == null)
+            {
+                throw new DetailsNotFoundException("FollowingUserId", followingUserId);
+            }
+
+            if (isFollow)
+            {
+                return FollowUser(currentUserId, followingUserId);
+            }
+            else
+            {
+                return UnFollowUser(currentUserId, followingUserId);
+
+
+            }
+        }
+
+        public UserDto GetUserDetails(int currentUserId, int userId)
+        {
+            var dbUserDetails = this.context.User.Include(x => x.Post)
+                                                 .Include(x => x.UserFollowerUser)
+                                                 .Include(x => x.UserFollowerFollowingUser)
+                                                 .FirstOrDefault(x => x.Id == userId);
+            if (dbUserDetails == null)
+            {
+                throw new DetailsNotFoundException("UserId", userId);
+            }
+
+            var userDetails = new UserDto()
+            {
+                Id = dbUserDetails.Id,
+                FirstName = dbUserDetails.FirstName,
+                LastName = dbUserDetails.LastName,
+                Username = dbUserDetails.Username,
+                EmailAddress = dbUserDetails.EmailAddress,
+                DateOfJoining = dbUserDetails.DateOfJoining,
+                UserAvatar = dbUserDetails.UserAvatar,
+                TotalPostCount = dbUserDetails.Post.Count(),
+                IsCurrentUser = dbUserDetails.Id == currentUserId,
+                TotalFollowers = dbUserDetails.UserFollowerFollowingUser.Count(x => x.UserId == currentUserId),
+                TotalFollowings = dbUserDetails.UserFollowerUser.Count(x => x.UserId == currentUserId),
+                IsAlreadyFollowed = dbUserDetails.Id == currentUserId || dbUserDetails.UserFollowerFollowingUser.Any(x => x.UserId == currentUserId),
+            };
+
+            var dbUserPosts = dbUserDetails.Post.Select(userPosts => new PostDto()
+            {
+                Id = userPosts.Id,
+                ContentLink = userPosts.ContentLink,
+                TotalLikes = userPosts.PostLike.Count(),
+                UploadBy = userPosts.UploadByUserId,
+                UploadOn = userPosts.UploadOn,
+                UploadedByUserName = userPosts.UploadByUser.Username,
+                UploadedUserAvatar = userPosts.UploadByUser.UserAvatar,
+                IsCurrentUserLikedPost = userPosts.PostLike.Any(z => z.LikeByUserId == currentUserId)
+            }).GetPaged(1, 15);
+
+            if (dbUserPosts != null && !dbUserPosts.Results.IsNullOrEmpty())
+            {
+                userDetails.UserPostPageNo = 1;
+                userDetails.UserPostPageSize = 15;
+                userDetails.AllUserPosts = dbUserPosts.Results.ToList();
+            }
+
+            return userDetails;
+        }
+
+        private bool UnFollowUser(int currentUserId, int followingUserId)
+        {
+            var userFollowerDetails = this.context.UserFollower.Where(x => x.UserId == currentUserId && x.FollowingUserId == followingUserId).ToList();
+
+            if (userFollowerDetails.IsNullOrEmpty())
+            {
+                return true;
+            }
+
+            this.context.RemoveRange(userFollowerDetails);
+            return this.context.SaveChanges() > 0;
+        }
+
+        private bool FollowUser(int currentUserId, int followingUserId)
+        {
+            var userFollowerDetails = this.context.UserFollower.Where(x => x.UserId == currentUserId && x.FollowingUserId == followingUserId).ToList();
+
+            if (!userFollowerDetails.IsNullOrEmpty())
+            {
+                return true;
+            }
+
+            this.context.UserFollower.Add(new UserFollower()
+            {
+                UserId = currentUserId,
+                FollowingUserId = followingUserId,
+                DateOfFollowing = CommonUtilities.GetCurrentDateTime()
+            });
+
+            return this.context.SaveChanges() > 0;
+        }
+
         private string GetRandomString()
         {
             return Guid.NewGuid().ToString("N");
         }
+
+
     }
 }

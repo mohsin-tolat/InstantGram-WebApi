@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using InstantGram.Common.Helper;
 
 namespace InstantGram.Api.Controllers
 {
@@ -66,6 +67,75 @@ namespace InstantGram.Api.Controllers
             catch (Exception ex)
             {
                 this.logger.LogError(ex, "Error Occurred in AddNewUser");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult FollowUser(string followingUserHashId)
+        {
+            try
+            {
+                var followingUserId = string.IsNullOrWhiteSpace(followingUserHashId) ? 0 : Convert.ToInt32(followingUserHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || followingUserId == 0)
+                {
+                    return BadRequest(new { Message = "Details Not Found" });
+                }
+
+                var response = this.userService.FollowUnFollowUser(currentUserDetails.UserId, followingUserId, true);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Error Occurred in FollowUser");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult UnFollowUser(string followingUserHashId)
+        {
+            try
+            {
+                var followingUserId = string.IsNullOrWhiteSpace(followingUserHashId) ? 0 : Convert.ToInt32(followingUserHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || followingUserId == 0)
+                {
+                    return BadRequest(new { Message = "Details Not Found" });
+                }
+
+
+                var response = this.userService.FollowUnFollowUser(currentUserDetails.UserId, followingUserId, false);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Error Occurred in UnFollowUser");
+                return BadRequest();
+            }
+        }
+
+
+        [HttpGet]
+        public IActionResult GetUserDetails(string userHashId)
+        {
+            try
+            {
+                var userId = string.IsNullOrWhiteSpace(userHashId) ? 0 : Convert.ToInt32(userHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || userId == 0)
+                {
+                    return BadRequest(new { Message = "Details Not Found" });
+                }
+
+
+                var response = this.userService.GetUserDetails(currentUserDetails.UserId, userId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Error Occurred in UnFollowUser");
                 return BadRequest();
             }
         }

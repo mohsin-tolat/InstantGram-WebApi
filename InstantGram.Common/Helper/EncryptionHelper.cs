@@ -42,7 +42,27 @@ namespace InstantGram.Common.Helper
                         Buffer.BlockCopy(iv, 0, result, 0, iv.Length);
                         Buffer.BlockCopy(encrypted, 0, result, iv.Length, encrypted.Length);
 
-                        return Convert.ToBase64String(result);
+                        var encryptedValue = Convert.ToBase64String(result);
+
+                        //URL Encryption Avoid Reserved Characters
+                        return encryptedValue.Replace("/", "-2F-")
+                                             .Replace("!", "-21-")
+                                             .Replace("#", "-23-")
+                                             .Replace("$", "-24-")
+                                             .Replace("&", "-26-")
+                                             .Replace("'", "-27-")
+                                             .Replace("(", "-28-")
+                                             .Replace(")", "-29-")
+                                             .Replace("*", "-2A-")
+                                             .Replace("+", "-2B-")
+                                             .Replace(",", "-2C-")
+                                             .Replace(":", "-3A-")
+                                             .Replace(";", "-3B-")
+                                             .Replace("=", "-3D-")
+                                             .Replace("?", "-3F-")
+                                             .Replace("@", "-40-")
+                                             .Replace("[", "-5B-")
+                                             .Replace("]", "-5D-");
                     }
                 }
             }
@@ -54,6 +74,26 @@ namespace InstantGram.Common.Helper
             {
                 return encryptedText;
             }
+
+            //URL Decrytion Avoid Reserved Characters
+            encryptedText = encryptedText.Replace("-2F-", "/")
+                                         .Replace("-21-", "!")
+                                         .Replace("-23-", "#")
+                                         .Replace("-24-", "$")
+                                         .Replace("-26-", "&")
+                                         .Replace("-27-", "'")
+                                         .Replace("-28-", "(")
+                                         .Replace("-29-", ")")
+                                         .Replace("-2A-", "*")
+                                         .Replace("-2B-", "+")
+                                         .Replace("-2C-", ",")
+                                         .Replace("-3A-", ":")
+                                         .Replace("-3B-", ";")
+                                         .Replace("-3D-", "=")
+                                         .Replace("-3F-", "?")
+                                         .Replace("-40-", "@")
+                                         .Replace("-5B-", "[")
+                                         .Replace("-5D-", "]");
 
             var b = Convert.FromBase64String(encryptedText);
 

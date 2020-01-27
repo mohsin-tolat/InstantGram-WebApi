@@ -8,6 +8,7 @@ using InstantGram.Core.Insterface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using InstantGram.Common.Helper;
 
 namespace InstantGram.Api.Controllers
 {
@@ -40,22 +41,21 @@ namespace InstantGram.Api.Controllers
             return BadRequest();
         }
 
-        [HttpPost("{postId}")]
-        public IActionResult LikeDislikePost(int postId)
+        [HttpPost("{postHashId}")]
+        public IActionResult LikeDislikePost(string postHashId)
         {
             try
             {
+                var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
                 var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
-                if (currentUserDetails.UserId > 0)
+                if (currentUserDetails.UserId == 0 || postId == 0)
                 {
-                    var response = this.postService.LikeDislikePost(currentUserDetails.UserId, postId);
-                    if (response != null)
-                    {
-                        return Ok(response);
-                    }
+                    return BadRequest();
                 }
 
-                return BadRequest();
+                var response = this.postService.LikeDislikePost(currentUserDetails.UserId, postId);
+
+                return Ok(response);
             }
             catch (System.Exception ex)
             {
