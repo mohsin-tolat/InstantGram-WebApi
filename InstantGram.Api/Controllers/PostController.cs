@@ -77,5 +77,20 @@ namespace InstantGram.Api.Controllers
 
             return BadRequest();
         }
+
+        [HttpGet]
+        public IActionResult GetPostByHashId([FromQuery]string postHashId)
+        {
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+            var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
+
+            if (currentUserDetails.UserId <= 0 || postId <= 0)
+            {
+                return BadRequest();
+            }
+
+            var response = this.postService.GetPostById(currentUserDetails.UserId, postId);
+            return Ok(response);
+        }
     }
 }

@@ -47,7 +47,7 @@ namespace InstantGram.Core.Service
 
         public PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize, int userId = 0)
         {
-            var allPosts = this.context.Post.Where(x => userId == 0 || x.UploadByUserId == userId).Select(x => new PostDto()
+            var allPosts = this.context.Post.Where(x => userId == 0 || x.UploadByUserId == userId).OrderByDescending(post => post.UploadOn).Select(x => new PostDto()
             {
                 Id = x.Id,
                 ContentLink = x.ContentLink,
@@ -62,11 +62,31 @@ namespace InstantGram.Core.Service
             return allPosts;
         }
 
+        public PostDto GetPostById(int currentLoggedInUserId, int postId)
+        {
+            var postDetails = this.context.Post.Where(x => x.Id == postId).OrderByDescending(post => post.UploadOn).Select(x => new PostDto()
+            {
+                Id = x.Id,
+                ContentLink = x.ContentLink,
+                TotalLikes = x.PostLike.Count(),
+                UploadBy = x.UploadByUserId,
+                UploadOn = x.UploadOn,
+                UploadedByUserName = x.UploadByUser.Username,
+                UploadedUserAvatar = x.UploadByUser.UserAvatar,
+                IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId)
+            }).FirstOrDefault();
+
+            return postDetails;
+        }
+
+
+
         public PostDto LikeDislikePost(int currentUserId, int postId)
         {
             var postDetails = this.context.Post.Include(x => x.PostLike)
                                                .Include(x => x.UploadByUser)
                                                .Where(x => x.Id == postId)
+                                               .OrderByDescending(post => post.UploadOn)
                                                .FirstOrDefault();
 
             if (postDetails == null)

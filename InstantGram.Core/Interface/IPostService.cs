@@ -11,5 +11,7 @@ namespace InstantGram.Core.Insterface
         PostDto LikeDislikePost(int currentUserId, int postId);
 
         PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize, int userId = 0);
+
+        PostDto GetPostById(int currentLoggedInUserId, int postId);
     }
 }

@@ -52,6 +52,7 @@ namespace InstantGram.Core.Service
                                                         || (x.FirstName.Contains(searchText)
                                                         || x.LastName.Contains(searchText)
                                                         || x.Username.Contains(searchText)))
+                                                        .OrderByDescending(usr => usr.DateOfJoining)
                                                         .Select(usr => new UserDto()
                                                         {
                                                             Id = usr.Id,
@@ -96,6 +97,7 @@ namespace InstantGram.Core.Service
             var dbUserDetails = this.context.User.Include(x => x.Post)
                                                  .Include(x => x.UserFollowerUser)
                                                  .Include(x => x.UserFollowerFollowingUser)
+                                                 .OrderByDescending(usr => usr.DateOfJoining)
                                                  .FirstOrDefault(x => x.Id == userId);
             if (dbUserDetails == null)
             {
@@ -118,7 +120,7 @@ namespace InstantGram.Core.Service
                 IsAlreadyFollowed = dbUserDetails.Id == currentUserId || dbUserDetails.UserFollowerFollowingUser.Any(x => x.UserId == currentUserId),
             };
 
-            var dbUserPosts = dbUserDetails.Post.Select(userPosts => new PostDto()
+            var dbUserPosts = dbUserDetails.Post.OrderByDescending(post => post.UploadOn).Select(userPosts => new PostDto()
             {
                 Id = userPosts.Id,
                 ContentLink = userPosts.ContentLink,
