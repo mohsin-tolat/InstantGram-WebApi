@@ -45,9 +45,9 @@ namespace InstantGram.Core.Service
             return allPosts;
         }
 
-        public PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize)
+        public PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize, int userId = 0)
         {
-            var allPosts = this.context.Post.Select(x => new PostDto()
+            var allPosts = this.context.Post.Where(x => userId == 0 || x.UploadByUserId == userId).Select(x => new PostDto()
             {
                 Id = x.Id,
                 ContentLink = x.ContentLink,

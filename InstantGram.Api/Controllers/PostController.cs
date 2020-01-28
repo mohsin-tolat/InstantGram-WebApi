@@ -63,5 +63,19 @@ namespace InstantGram.Api.Controllers
                 return BadRequest(new { message = "Something went wrong, Please Try again Later." });
             }
         }
+
+        [HttpGet]
+        public IActionResult GetAllOpenPosts([FromQuery]string userHashId = "", [FromQuery] int pageNo = 1, [FromQuery]int pageSize = 10)
+        {
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+            var userId = string.IsNullOrWhiteSpace(userHashId) ? 0 : Convert.ToInt32(userHashId.ToDecrypt());
+            if (currentUserDetails.UserId > 0)
+            {
+                var response = this.postService.GetAllOpenPosts(currentUserDetails.UserId, pageNo, pageSize, userId);
+                return Ok(response);
+            }
+
+            return BadRequest();
+        }
     }
 }

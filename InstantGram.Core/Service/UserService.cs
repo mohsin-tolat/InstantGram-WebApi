@@ -132,8 +132,9 @@ namespace InstantGram.Core.Service
 
             if (dbUserPosts != null && !dbUserPosts.Results.IsNullOrEmpty())
             {
-                userDetails.UserPostPageNo = 1;
-                userDetails.UserPostPageSize = 15;
+                userDetails.UserPostPageNo = dbUserPosts.CurrentPage;
+                userDetails.UserPostPageSize = dbUserPosts.PageSize;
+                userDetails.UserPostPageCount = dbUserPosts.PageCount;
                 userDetails.AllUserPosts = dbUserPosts.Results.ToList();
             }
 

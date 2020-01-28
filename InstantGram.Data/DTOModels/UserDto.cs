@@ -69,5 +69,7 @@ namespace InstantGram.Data.DTOModels
         public int UserPostPageNo { get; set; }
 
         public int UserPostPageSize { get; set; }
+
+        public int UserPostPageCount { get; set; }
     }
 }

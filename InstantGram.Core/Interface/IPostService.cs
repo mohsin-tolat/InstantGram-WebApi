@@ -9,5 +9,7 @@ namespace InstantGram.Core.Insterface
         PagedResult<PostDto> GetAllNewPostByUser(int userId, int pageNo, int pageSize);
 
         PostDto LikeDislikePost(int currentUserId, int postId);
+
+        PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize, int userId = 0);
     }
 }
