@@ -37,7 +37,7 @@ namespace InstantGram.Common.Domain.Service
                 loggedInUser = this.context.User.Where(x => x.Username == userNameClaimValue).Select(x => new LoggedInUserModel()
                 {
                     UserId = x.Id,
-                    UserName = x.Username,
+                    Username = x.Username,
                     EmailAddress = x.EmailAddress
                 }).FirstOrDefault();
             }

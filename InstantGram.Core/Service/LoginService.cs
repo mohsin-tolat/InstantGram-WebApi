@@ -54,7 +54,8 @@ namespace InstantGram.Core.Service
 
                 return new LoggedInUserModel()
                 {
-                    UserName = userName,
+                    // UserId = userDetails.Id,
+                    Username = userDetails.Username,
                     Token = tokenHandler.WriteToken(token)
                 };
             }

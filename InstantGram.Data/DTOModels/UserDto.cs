@@ -13,7 +13,7 @@ namespace InstantGram.Data.DTOModels
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.userId))
+                if (!string.IsNullOrWhiteSpace(this.userId))
                 {
                     return Convert.ToInt32(this.userId);
                 }

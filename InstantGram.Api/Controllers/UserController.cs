@@ -139,5 +139,27 @@ namespace InstantGram.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        public IActionResult GetCurrentUserProfile()
+        {
+            try
+            {
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0)
+                {
+                    return BadRequest(new { Message = "Details Not Found" });
+                }
+
+
+                var response = this.userService.GetUserDetails(currentUserDetails.UserId, currentUserDetails.UserId);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "Error Occurred in UnFollowUser");
+                return BadRequest();
+            }
+        }
     }
 }
