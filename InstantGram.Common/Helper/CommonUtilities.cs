@@ -14,6 +14,11 @@ namespace InstantGram.Common.Helper
             return Guid.NewGuid().ToString("N");
         }
 
+        public static string GenerateRandomString()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
 
         public static string GenerateHashPassword(string passwordValue, string passwordSalt)
         {

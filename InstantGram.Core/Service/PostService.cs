@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
@@ -124,6 +125,52 @@ namespace InstantGram.Core.Service
                 UploadedUserAvatar = postDetails.UploadByUser.UserAvatar,
                 IsCurrentUserLikedPost = postDetails.PostLike.Any(z => z.LikeByUserId == currentUserId)
             };
+        }
+
+        public bool SavePostContentToFolderAndDatabase(int currentLoggedInUserId, string instantGramApiUrl, string postContent)
+        {
+            var postContentLocal = postContent.Replace("data:image/jpeg;base64,", string.Empty);
+            var folderName = Path.Combine("Resources", "UserPosts", currentLoggedInUserId.ToString());
+            var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
+            string imageName = CommonUtilities.GenerateRandomString() + ".jpg";
+            var isImageSaved = this.SaveImageToFolder(postContentLocal, imageName, pathToSave);
+            if (!isImageSaved)
+            {
+                return false;
+            }
+
+            var dbPath = Path.Combine(instantGramApiUrl, folderName, imageName);
+            return this.SaveImageDetailsIntoDatabase(currentLoggedInUserId, dbPath);
+        }
+
+        private bool SaveImageDetailsIntoDatabase(int currentLoggedInUserId, string dbPath)
+        {
+            this.context.Post.Add(new Post()
+            {
+                UploadByUserId = currentLoggedInUserId,
+                ContentLink = $"{dbPath}",
+                UploadOn = CommonUtilities.GetCurrentDateTime(),
+            });
+
+            return this.context.SaveChanges() > 0;
+        }
+
+        private bool SaveImageToFolder(string postContent, string imgName, string pathToFolder)
+        {
+            //Check if directory exist
+            if (!System.IO.Directory.Exists(pathToFolder))
+            {
+                System.IO.Directory.CreateDirectory(pathToFolder); //Create directory if it doesn't exist
+            }
+
+            //set the image path
+            string imgPath = Path.Combine(pathToFolder, imgName);
+
+            byte[] imageBytes = Convert.FromBase64String(postContent);
+
+            File.WriteAllBytes(imgPath, imageBytes);
+
+            return true;
         }
     }
 }

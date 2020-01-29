@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using InstantGram.Common.Helper;
+using InstantGram.Data.DTOModels;
+using Microsoft.Extensions.Options;
+using InstantGram.Api.Models;
 
 namespace InstantGram.Api.Controllers
 {
@@ -21,11 +24,14 @@ namespace InstantGram.Api.Controllers
         private readonly ILogger<PostController> logger;
         private readonly IUserResolverService userResolverService;
 
-        public PostController(IPostService postService, ILogger<PostController> logger, IUserResolverService userResolverService)
+        public AppSettings appSettings { get; }
+
+        public PostController(IPostService postService, ILogger<PostController> logger, IUserResolverService userResolverService, IOptions<AppSettings> appSettings)
         {
             this.postService = postService;
             this.logger = logger;
             this.userResolverService = userResolverService;
+            this.appSettings = appSettings.Value;
         }
 
         [HttpGet]
@@ -91,6 +97,21 @@ namespace InstantGram.Api.Controllers
 
             var response = this.postService.GetPostById(currentUserDetails.UserId, postId);
             return Ok(response);
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        public IActionResult UploadPost([FromBody]UploadPostDto uploadPostDetails)
+        {
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+
+
+            if (currentUserDetails.UserId <= 0 || string.IsNullOrWhiteSpace(uploadPostDetails.ImageContent))
+            {
+                return BadRequest();
+            }
+
+            var isImageUploaded = this.postService.SavePostContentToFolderAndDatabase(currentUserDetails.UserId, this.appSettings.ApplicationDomainConfig.InstantGramApiUrl, uploadPostDetails.ImageContent);
+            return Ok(isImageUploaded);
         }
     }
 }

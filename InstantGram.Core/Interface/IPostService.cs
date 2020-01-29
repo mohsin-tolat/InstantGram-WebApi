@@ -13,5 +13,7 @@ namespace InstantGram.Core.Insterface
         PagedResult<PostDto> GetAllOpenPosts(int currentLoggedInUserId, int pageNo, int pageSize, int userId = 0);
 
         PostDto GetPostById(int currentLoggedInUserId, int postId);
+
+        bool SavePostContentToFolderAndDatabase(int currentLoggedInUserId, string instantGramApiUrl, string postContent);
     }
 }
