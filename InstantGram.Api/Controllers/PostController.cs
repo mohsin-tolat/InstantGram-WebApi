@@ -1,8 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using InstantGram.Common.Domain.Interface;
 using InstantGram.Core.Insterface;
 using Microsoft.AspNetCore.Authorization;
@@ -112,6 +108,22 @@ namespace InstantGram.Api.Controllers
 
             var isImageUploaded = this.postService.SavePostContentToFolderAndDatabase(currentUserDetails.UserId, this.appSettings.ApplicationDomainConfig.InstantGramApiUrl, uploadPostDetails.ImageContent);
             return Ok(isImageUploaded);
+        }
+
+
+        [HttpDelete]
+        public IActionResult DeletePostByHashId([FromQuery]string postHashId)
+        {
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+            var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
+
+            if (currentUserDetails.UserId <= 0 || postId <= 0)
+            {
+                return BadRequest();
+            }
+
+            var response = this.postService.DeletePostById(currentUserDetails.UserId, postId, this.appSettings.ApplicationDomainConfig.InstantGramApiUrl);
+            return Ok(response);
         }
     }
 }

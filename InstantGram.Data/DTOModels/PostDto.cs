@@ -94,5 +94,7 @@ namespace InstantGram.Data.DTOModels
         public string UploadedByUserName { get; set; }
 
         public string UploadedUserAvatar { get; set; }
+
+        public bool IsCurrentUserUploadedPost { get; set; }
     }
 }

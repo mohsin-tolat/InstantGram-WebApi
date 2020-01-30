@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using InstantGram.Common.Exceptions;
 using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DBContexts;
@@ -22,6 +23,7 @@ namespace InstantGram.Core.Service
             this.logger = logger;
             this.context = context;
         }
+
 
         public PagedResult<PostDto> GetAllNewPostByUser(int currentLoggedInUserId, int pageNo, int pageSize)
         {
@@ -74,7 +76,8 @@ namespace InstantGram.Core.Service
                 UploadOn = x.UploadOn,
                 UploadedByUserName = x.UploadByUser.Username,
                 UploadedUserAvatar = x.UploadByUser.UserAvatar,
-                IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId)
+                IsCurrentUserLikedPost = x.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId),
+                IsCurrentUserUploadedPost = x.UploadByUserId == currentLoggedInUserId
             }).FirstOrDefault();
 
             return postDetails;
@@ -141,6 +144,44 @@ namespace InstantGram.Core.Service
 
             var dbPath = Path.Combine(instantGramApiUrl, folderName, imageName);
             return this.SaveImageDetailsIntoDatabase(currentLoggedInUserId, dbPath);
+        }
+
+        public bool DeletePostById(int currentLoggedInUserId, int postId, string currentUrl)
+        {
+            var postDetails = this.context.Post.Include(x => x.PostLike).FirstOrDefault(x => x.Id == postId && x.UploadByUserId == currentLoggedInUserId);
+
+            if (postDetails == null)
+            {
+                throw new DetailsNotFoundException("PostId", postId.ToEncrypt());
+            }
+
+            this.DeletePostFromStorage(postDetails, currentUrl);
+            this.context.PostLike.RemoveRange(postDetails.PostLike);
+            this.context.Post.Remove(postDetails);
+            return this.context.SaveChanges() > 0;
+        }
+
+        private bool DeletePostFromStorage(Post postDetails, string currentUrl)
+        {
+            try
+            {
+                string pathToImage = postDetails.ContentLink.Replace(currentUrl, string.Empty);
+                //set the image path
+                string imgPath = Path.Combine(Directory.GetCurrentDirectory(), pathToImage);
+
+                if (File.Exists(imgPath))
+                {
+                    File.Delete(imgPath);
+                    return true;
+                }
+
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error Occurred while deleting files from storage in DeletePostFromStorage.");
+                return false;
+            }
         }
 
         private bool SaveImageDetailsIntoDatabase(int currentLoggedInUserId, string dbPath)

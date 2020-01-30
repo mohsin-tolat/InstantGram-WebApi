@@ -15,5 +15,7 @@ namespace InstantGram.Core.Insterface
         PostDto GetPostById(int currentLoggedInUserId, int postId);
 
         bool SavePostContentToFolderAndDatabase(int currentLoggedInUserId, string instantGramApiUrl, string postContent);
+
+        bool DeletePostById(int currentLoggedInUserId, int postId, string currentUrl);
     }
 }
