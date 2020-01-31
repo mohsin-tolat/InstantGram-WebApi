@@ -1,8 +1,7 @@
 using System.IO;
 using InstantGram.Api.Configuration;
-using InstantGram.Api.Models;
-using InstantGram.Common.Domain.Helper;
 using InstantGram.Data.DBContexts;
+using InstantGram.Data.DTOModels;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;

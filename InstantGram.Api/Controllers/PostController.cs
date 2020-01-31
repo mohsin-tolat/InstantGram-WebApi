@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using InstantGram.Common.Helper;
 using InstantGram.Data.DTOModels;
 using Microsoft.Extensions.Options;
-using InstantGram.Api.Models;
 
 namespace InstantGram.Api.Controllers
 {
@@ -106,7 +105,7 @@ namespace InstantGram.Api.Controllers
                 return BadRequest();
             }
 
-            var isImageUploaded = this.postService.SavePostContentToFolderAndDatabase(currentUserDetails.UserId, this.appSettings.ApplicationDomainConfig.InstantGramApiUrl, uploadPostDetails.ImageContent);
+            var isImageUploaded = this.postService.SavePostContentToFolderAndDatabase(currentUserDetails.UserId, uploadPostDetails.ImageContent);
             return Ok(isImageUploaded);
         }
 
@@ -122,7 +121,7 @@ namespace InstantGram.Api.Controllers
                 return BadRequest();
             }
 
-            var response = this.postService.DeletePostById(currentUserDetails.UserId, postId, this.appSettings.ApplicationDomainConfig.InstantGramApiUrl);
+            var response = this.postService.DeletePostById(currentUserDetails.UserId, postId);
             return Ok(response);
         }
     }

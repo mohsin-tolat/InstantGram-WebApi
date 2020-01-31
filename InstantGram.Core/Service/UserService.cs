@@ -9,6 +9,7 @@ using InstantGram.Data.DBModels;
 using InstantGram.Data.DTOModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace InstantGram.Core.Service
 {
@@ -17,8 +18,11 @@ namespace InstantGram.Core.Service
         private ILogger<PostService> logger;
         private ApplicationDbContext context;
 
-        public UserService(ILogger<PostService> logger, ApplicationDbContext context)
+        public AppSettings appSettings { get; }
+
+        public UserService(IOptions<AppSettings> appSettings, ILogger<PostService> logger, ApplicationDbContext context)
         {
+            this.appSettings = appSettings.Value;
             this.logger = logger;
             this.context = context;
         }
@@ -130,7 +134,7 @@ namespace InstantGram.Core.Service
                 UploadedByUserName = userPosts.UploadByUser.Username,
                 UploadedUserAvatar = userPosts.UploadByUser.UserAvatar,
                 IsCurrentUserLikedPost = userPosts.PostLike.Any(z => z.LikeByUserId == currentUserId)
-            }).GetPaged(1, 15);
+            }).GetPaged(appSettings.UIRenderSetting.PostPageNoForUserProfile, appSettings.UIRenderSetting.PostPageSizeForUserProfile);
 
             if (dbUserPosts != null && !dbUserPosts.Results.IsNullOrEmpty())
             {

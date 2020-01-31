@@ -10,16 +10,19 @@ using InstantGram.Data.DBModels;
 using InstantGram.Data.DTOModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace InstantGram.Core.Service
 {
     public class PostService : IPostService
     {
+        private readonly AppSettings appSettings;
         private ILogger<PostService> logger;
         private ApplicationDbContext context;
 
-        public PostService(ILogger<PostService> logger, ApplicationDbContext context)
+        public PostService(IOptions<AppSettings> appSettings, ILogger<PostService> logger, ApplicationDbContext context)
         {
+            this.appSettings = appSettings.Value;
             this.logger = logger;
             this.context = context;
         }
@@ -130,7 +133,7 @@ namespace InstantGram.Core.Service
             };
         }
 
-        public bool SavePostContentToFolderAndDatabase(int currentLoggedInUserId, string instantGramApiUrl, string postContent)
+        public bool SavePostContentToFolderAndDatabase(int currentLoggedInUserId, string postContent)
         {
             var postContentLocal = postContent.Replace("data:image/jpeg;base64,", string.Empty);
             var folderName = Path.Combine("Resources", "UserPosts", currentLoggedInUserId.ToString());
@@ -142,11 +145,11 @@ namespace InstantGram.Core.Service
                 return false;
             }
 
-            var dbPath = Path.Combine(instantGramApiUrl, folderName, imageName);
+            var dbPath = Path.Combine(this.appSettings.ApplicationDomainConfiguration.InstantGramApiUrl, folderName, imageName);
             return this.SaveImageDetailsIntoDatabase(currentLoggedInUserId, dbPath);
         }
 
-        public bool DeletePostById(int currentLoggedInUserId, int postId, string currentUrl)
+        public bool DeletePostById(int currentLoggedInUserId, int postId)
         {
             var postDetails = this.context.Post.Include(x => x.PostLike).FirstOrDefault(x => x.Id == postId && x.UploadByUserId == currentLoggedInUserId);
 
@@ -155,7 +158,7 @@ namespace InstantGram.Core.Service
                 throw new DetailsNotFoundException("PostId", postId.ToEncrypt());
             }
 
-            this.DeletePostFromStorage(postDetails, currentUrl);
+            this.DeletePostFromStorage(postDetails, this.appSettings.ApplicationDomainConfiguration.InstantGramApiUrl);
             this.context.PostLike.RemoveRange(postDetails.PostLike);
             this.context.Post.Remove(postDetails);
             return this.context.SaveChanges() > 0;

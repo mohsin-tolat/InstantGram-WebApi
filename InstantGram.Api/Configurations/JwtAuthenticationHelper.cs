@@ -1,5 +1,5 @@
 using System.Text;
-using InstantGram.Api.Models;
+using InstantGram.Data.DTOModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
