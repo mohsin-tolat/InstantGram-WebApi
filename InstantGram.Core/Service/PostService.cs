@@ -164,6 +164,49 @@ namespace InstantGram.Core.Service
             return this.context.SaveChanges() > 0;
         }
 
+        public PagedResult<ActivityDto> GetCurrentUserPostsActivities(int currentLoggedInUserId, int pageNo, int pageSize)
+        {
+            var activities = this.context.PostLike
+                                                       .Include(x => x.Post)
+                                                       .Where(x => x.Post.UploadByUserId == currentLoggedInUserId && x.LikeByUserId != currentLoggedInUserId)
+                                                       .Select(activity => new ActivityDto()
+                                                       {
+                                                           ActivityDoneByUser = new UserDto()
+                                                           {
+                                                               Id = activity.LikeByUser.Id,
+                                                               FirstName = activity.LikeByUser.FirstName,
+                                                               LastName = activity.LikeByUser.LastName,
+                                                               Username = activity.LikeByUser.Username,
+                                                               EmailAddress = activity.LikeByUser.EmailAddress,
+                                                               DateOfJoining = activity.LikeByUser.DateOfJoining,
+                                                               UserAvatar = activity.LikeByUser.UserAvatar,
+                                                               TotalPostCount = activity.LikeByUser.Post.Count(),
+                                                               IsCurrentUser = activity.LikeByUser.Id == currentLoggedInUserId,
+                                                               TotalFollowers = activity.LikeByUser.UserFollowerFollowingUser.Count(x => x.UserId == currentLoggedInUserId),
+                                                               TotalFollowings = activity.LikeByUser.UserFollowerUser.Count(x => x.UserId == currentLoggedInUserId),
+                                                               IsAlreadyFollowed = activity.LikeByUser.Id == currentLoggedInUserId || activity.LikeByUser.UserFollowerFollowingUser.Any(x => x.UserId == currentLoggedInUserId),
+                                                           },
+                                                           ActivityDoneOn = activity.LikeOn,
+                                                           IsComment = false,
+                                                           IsLike = true,
+                                                           Post = new PostDto()
+                                                           {
+                                                               Id = activity.Post.Id,
+                                                               ContentLink = activity.Post.ContentLink,
+                                                               TotalLikes = activity.Post.PostLike.Count(),
+                                                               UploadBy = activity.Post.UploadByUserId,
+                                                               UploadOn = activity.Post.UploadOn,
+                                                               UploadedByUserName = activity.Post.UploadByUser.Username,
+                                                               UploadedUserAvatar = activity.Post.UploadByUser.UserAvatar,
+                                                               IsCurrentUserLikedPost = activity.Post.PostLike.Any(z => z.LikeByUserId == currentLoggedInUserId)
+                                                           }
+                                                       })
+                                                       .OrderByDescending(x => x.ActivityDoneOn)
+                                                       .GetPaged(pageNo, pageSize);
+
+            return activities;
+        }
+
         private bool DeletePostFromStorage(Post postDetails, string currentUrl)
         {
             try

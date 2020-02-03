@@ -124,5 +124,20 @@ namespace InstantGram.Api.Controllers
             var response = this.postService.DeletePostById(currentUserDetails.UserId, postId);
             return Ok(response);
         }
+
+        [HttpGet]
+        public IActionResult GetCurrentUserPostsActivities([FromQuery] int pageNo = 1, [FromQuery]int pageSize = 20)
+        {
+            var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+
+            if (currentUserDetails.UserId == 0)
+            {
+                return BadRequest();
+            }
+
+            var response = this.postService.GetCurrentUserPostsActivities(currentUserDetails.UserId, pageNo, pageSize);
+            return Ok(response);
+        }
+
     }
 }
