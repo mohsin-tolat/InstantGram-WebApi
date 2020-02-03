@@ -50,7 +50,7 @@ namespace InstantGram.Core.Service
 
         public PagedResult<UserDto> GetUserDetailsBasedOnSearch(int currentUserId, string searchText, int pageNo, int pageSize)
         {
-            this.logger.LogDebug("GetAllNewPostByUser Started");
+            this.logger.LogDebug("GetUserDetailsBasedOnSearch Started");
 
             var allUsers = this.context.User.Where(x => string.IsNullOrWhiteSpace(searchText)
                                                         || (x.FirstName.Contains(searchText)
@@ -67,10 +67,11 @@ namespace InstantGram.Core.Service
                                                             DateOfJoining = usr.DateOfJoining,
                                                             UserAvatar = usr.UserAvatar,
                                                             TotalPostCount = usr.Post.Count(),
+                                                            IsCurrentUser = usr.Id == currentUserId,
                                                             IsAlreadyFollowed = usr.Id == currentUserId || usr.UserFollowerFollowingUser.Any(x => x.UserId == currentUserId)
                                                         }).GetPaged<UserDto>(pageNo, pageSize);
 
-            this.logger.LogDebug("GetAllNewPostByUser End");
+            this.logger.LogDebug("GetUserDetailsBasedOnSearch End");
             return allUsers;
         }
 
