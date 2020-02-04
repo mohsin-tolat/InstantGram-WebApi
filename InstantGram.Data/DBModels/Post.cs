@@ -7,6 +7,7 @@ namespace InstantGram.Data.DBModels
     {
         public Post()
         {
+            PostComment = new HashSet<PostComment>();
             PostLike = new HashSet<PostLike>();
         }
 
@@ -16,6 +17,7 @@ namespace InstantGram.Data.DBModels
         public DateTime UploadOn { get; set; }
 
         public virtual User UploadByUser { get; set; }
+        public virtual ICollection<PostComment> PostComment { get; set; }
         public virtual ICollection<PostLike> PostLike { get; set; }
     }
 }

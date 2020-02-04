@@ -16,7 +16,9 @@ namespace InstantGram.Data.DBContexts
         {
         }
 
+        public virtual DbSet<CommentLike> CommentLike { get; set; }
         public virtual DbSet<Post> Post { get; set; }
+        public virtual DbSet<PostComment> PostComment { get; set; }
         public virtual DbSet<PostLike> PostLike { get; set; }
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserFollower> UserFollower { get; set; }
@@ -32,6 +34,21 @@ namespace InstantGram.Data.DBContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CommentLike>(entity =>
+            {
+                entity.Property(e => e.LikeOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Comment)
+                    .WithMany(p => p.CommentLike)
+                    .HasForeignKey(d => d.CommentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.LikeByUser)
+                    .WithMany(p => p.CommentLike)
+                    .HasForeignKey(d => d.LikeByUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
             modelBuilder.Entity<Post>(entity =>
             {
                 entity.Property(e => e.ContentLink)
@@ -45,6 +62,24 @@ namespace InstantGram.Data.DBContexts
                     .WithMany(p => p.Post)
                     .HasForeignKey(d => d.UploadByUserId)
                     .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<PostComment>(entity =>
+            {
+                entity.Property(e => e.CommentContent)
+                    .IsRequired()
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CommentedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.CommentedByUser)
+                    .WithMany(p => p.PostComment)
+                    .HasForeignKey(d => d.CommentedByUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(d => d.Post)
+                    .WithMany(p => p.PostComment)
+                    .HasForeignKey(d => d.PostId);
             });
 
             modelBuilder.Entity<PostLike>(entity =>

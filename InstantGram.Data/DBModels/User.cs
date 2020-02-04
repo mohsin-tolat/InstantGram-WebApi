@@ -7,7 +7,9 @@ namespace InstantGram.Data.DBModels
     {
         public User()
         {
+            CommentLike = new HashSet<CommentLike>();
             Post = new HashSet<Post>();
+            PostComment = new HashSet<PostComment>();
             PostLike = new HashSet<PostLike>();
             UserFollowerFollowingUser = new HashSet<UserFollower>();
             UserFollowerUser = new HashSet<UserFollower>();
@@ -23,7 +25,9 @@ namespace InstantGram.Data.DBModels
         public DateTime DateOfJoining { get; set; }
         public string UserAvatar { get; set; }
 
+        public virtual ICollection<CommentLike> CommentLike { get; set; }
         public virtual ICollection<Post> Post { get; set; }
+        public virtual ICollection<PostComment> PostComment { get; set; }
         public virtual ICollection<PostLike> PostLike { get; set; }
         public virtual ICollection<UserFollower> UserFollowerFollowingUser { get; set; }
         public virtual ICollection<UserFollower> UserFollowerUser { get; set; }
