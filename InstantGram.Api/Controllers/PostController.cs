@@ -139,5 +139,74 @@ namespace InstantGram.Api.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public IActionResult GetPostCommentsByPostHashId([FromQuery] string postHashId, [FromQuery] int pageNo = 1, [FromQuery]int pageSize = 20)
+        {
+            try
+            {
+                var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || postId == 0)
+                {
+                    return BadRequest();
+                }
+
+                var response = this.postService.GetPostCommentsByPostId(currentUserDetails.UserId, postId, pageNo, pageSize);
+
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error occurred in Get PostComments By Post Hash Id.");
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult AddNewCommentForPost([FromBody] UpdateCommentModel comment)
+        {
+            try
+            {
+                var postId = string.IsNullOrWhiteSpace(comment.PostHashId) ? 0 : Convert.ToInt32(comment.PostHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || postId == 0 || string.IsNullOrWhiteSpace(comment.Content))
+                {
+                    return BadRequest();
+                }
+
+                var response = this.postService.AddNewCommentForPost(currentUserDetails.UserId, comment);
+
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error occurred in Get PostComments By Post Hash Id.");
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
+            }
+        }
+
+        [HttpDelete]
+        public IActionResult DeletePostCommentByPostHashId([FromQuery] string commentHashId)
+        {
+            try
+            {
+                var commentId = string.IsNullOrWhiteSpace(commentHashId) ? 0 : Convert.ToInt32(commentHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || commentId == 0)
+                {
+                    return BadRequest();
+                }
+
+                var response = this.postService.DeletePostCommentByPostId(commentId, currentUserDetails.UserId);
+
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error occurred in Get PostComments By Post Hash Id.");
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
+            }
+        }
+
     }
 }

@@ -5,10 +5,12 @@ using Newtonsoft.Json;
 
 namespace InstantGram.Data.DTOModels
 {
-    public class PostDto
+    public class UpdateCommentModel
     {
+        public string Content { get; set; }
+
         [JsonIgnore]
-        public int Id
+        public int PostId
         {
             get
             {
@@ -40,63 +42,46 @@ namespace InstantGram.Data.DTOModels
             }
             set
             {
-                this.postId = value;
+                this.postId = value.ToDecrypt().ToString();
             }
         }
+
 
         [JsonIgnore]
-        public int UploadBy
+        public int CommentedByUserId
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(this.uploadByUserId))
+                if (!string.IsNullOrWhiteSpace(this.commentedByUserId))
                 {
-                    return Convert.ToInt32(this.uploadByUserId);
+                    return Convert.ToInt32(this.commentedByUserId);
                 }
 
                 return default;
             }
             set
             {
-                this.uploadByUserId = value.ToString();
+                this.commentedByUserId = value.ToString();
             }
         }
 
-        public string uploadByUserId { get; set; }
+        private string commentedByUserId { get; set; }
 
-        public string UploadedByUserHashId
+        public string CommentedByUserHashId
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(this.uploadByUserId))
+                if (!string.IsNullOrWhiteSpace(this.commentedByUserId))
                 {
-                    return this.uploadByUserId.ToEncrypt();
+                    return this.commentedByUserId.ToEncrypt();
                 }
 
                 return default;
             }
             set
             {
-                this.uploadByUserId = value.ToDecrypt().ToString();
+                this.commentedByUserId = value.ToDecrypt().ToString();
             }
         }
-
-
-
-        public string ContentLink { get; set; }
-
-        public DateTime UploadOn { get; set; }
-
-        public int TotalLikes { get; set; }
-
-        public int TotalComments { get; set; }
-
-        public bool IsCurrentUserLikedPost { get; set; }
-
-        public string UploadedByUserName { get; set; }
-
-        public string UploadedUserAvatar { get; set; }
-
-        public bool IsCurrentUserUploadedPost { get; set; }
     }
 }

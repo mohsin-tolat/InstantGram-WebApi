@@ -39,6 +39,7 @@ namespace InstantGram.Core.Service
                             {
                                 Id = userPosts.Id,
                                 ContentLink = userPosts.ContentLink,
+                                TotalComments = userPosts.PostComment.Count(),
                                 TotalLikes = userPosts.PostLike.Count(),
                                 UploadBy = userPosts.UploadByUserId,
                                 UploadOn = userPosts.UploadOn,
@@ -57,6 +58,7 @@ namespace InstantGram.Core.Service
             {
                 Id = x.Id,
                 ContentLink = x.ContentLink,
+                TotalComments = x.PostComment.Count(),
                 TotalLikes = x.PostLike.Count(),
                 UploadBy = x.UploadByUserId,
                 UploadOn = x.UploadOn,
@@ -74,6 +76,7 @@ namespace InstantGram.Core.Service
             {
                 Id = x.Id,
                 ContentLink = x.ContentLink,
+                TotalComments = x.PostComment.Count(),
                 TotalLikes = x.PostLike.Count(),
                 UploadBy = x.UploadByUserId,
                 UploadOn = x.UploadOn,
@@ -124,6 +127,7 @@ namespace InstantGram.Core.Service
             {
                 Id = postDetails.Id,
                 ContentLink = postDetails.ContentLink,
+                TotalComments = postDetails.PostComment.Count(),
                 TotalLikes = postDetails.PostLike.Count(),
                 UploadBy = postDetails.UploadByUserId,
                 UploadOn = postDetails.UploadOn,
@@ -193,6 +197,7 @@ namespace InstantGram.Core.Service
                                                            {
                                                                Id = activity.Post.Id,
                                                                ContentLink = activity.Post.ContentLink,
+                                                               TotalComments = activity.Post.PostComment.Count(),
                                                                TotalLikes = activity.Post.PostLike.Count(),
                                                                UploadBy = activity.Post.UploadByUserId,
                                                                UploadOn = activity.Post.UploadOn,
@@ -205,6 +210,80 @@ namespace InstantGram.Core.Service
                                                        .GetPaged(pageNo, pageSize);
 
             return activities;
+        }
+
+        public PagedResult<CommentDto> GetPostCommentsByPostId(int currentLoggedInUserId, int postId, int pageNo, int pageSize)
+        {
+            var postComments = this.context.PostComment
+                                                       .Include(x => x.Post)
+                                                       .Where(x => x.PostId == postId)
+                                                       .Select(comment => new CommentDto()
+                                                       {
+                                                           Id = comment.Id,
+                                                           CommentedBy = new UserDto()
+                                                           {
+                                                               Id = comment.CommentedByUser.Id,
+                                                               FirstName = comment.CommentedByUser.FirstName,
+                                                               LastName = comment.CommentedByUser.LastName,
+                                                               Username = comment.CommentedByUser.Username,
+                                                               EmailAddress = comment.CommentedByUser.EmailAddress,
+                                                               DateOfJoining = comment.CommentedByUser.DateOfJoining,
+                                                               UserAvatar = comment.CommentedByUser.UserAvatar,
+                                                           },
+                                                           Content = comment.CommentContent,
+                                                           TotalCommentLikes = comment.CommentLike.Count(),
+                                                           IsCurrentUserComment = comment.CommentedByUserId == currentLoggedInUserId,
+                                                           IsCurrentUserLikeComment = comment.CommentLike.Any(x => x.LikeByUserId == currentLoggedInUserId),
+                                                           CommentedOn = comment.CommentedOn,
+                                                           PostDetails = new PostDto()
+                                                           {
+                                                               Id = comment.Post.Id,
+                                                               ContentLink = comment.Post.ContentLink,
+                                                               TotalComments = comment.Post.PostComment.Count(),
+                                                               TotalLikes = comment.Post.PostLike.Count(),
+                                                               UploadBy = comment.Post.UploadByUserId,
+                                                               UploadOn = comment.Post.UploadOn,
+                                                               UploadedByUserName = comment.Post.UploadByUser.Username,
+                                                               UploadedUserAvatar = comment.Post.UploadByUser.UserAvatar,
+                                                           }
+                                                       })
+                                                       .OrderByDescending(x => x.CommentedOn)
+                                                       .GetPaged(pageNo, pageSize);
+
+            return postComments;
+        }
+
+        public bool AddNewCommentForPost(int currentUserId, UpdateCommentModel comment)
+        {
+            var isPostAvailable = this.context.Post.Any(x => x.Id == comment.PostId);
+            if (!isPostAvailable)
+            {
+                return isPostAvailable;
+            }
+
+            this.context.PostComment.Add(new PostComment()
+            {
+                CommentContent = comment.Content,
+                CommentedByUserId = currentUserId,
+                CommentedOn = CommonUtilities.GetCurrentDateTime(),
+                PostId = comment.PostId,
+            });
+
+            return this.context.SaveChanges() > 0;
+        }
+
+        public bool DeletePostCommentByPostId(int commentId, int currentUserId)
+        {
+            var postDetails = this.context.PostComment.Where(x => x.Id == commentId && x.CommentedByUserId == currentUserId).FirstOrDefault();
+            if (postDetails == null)
+            {
+                return true;
+            }
+
+            this.context.CommentLike.RemoveRange(postDetails.CommentLike);
+            this.context.PostComment.Remove(postDetails);
+
+            return this.context.SaveChanges() > 0;
         }
 
         private bool DeletePostFromStorage(Post postDetails, string currentUrl)

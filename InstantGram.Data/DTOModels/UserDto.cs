@@ -41,7 +41,7 @@ namespace InstantGram.Data.DTOModels
             }
             set
             {
-                this.userId = value;
+                this.userId = value.ToDecrypt().ToString();
             }
         }
 

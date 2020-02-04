@@ -19,5 +19,10 @@ namespace InstantGram.Core.Insterface
         bool DeletePostById(int currentLoggedInUserId, int postId);
 
         PagedResult<ActivityDto> GetCurrentUserPostsActivities(int currentLoggedInUserId, int pageNo, int pageSize);
+
+        PagedResult<CommentDto> GetPostCommentsByPostId(int currentLoggedInUserId, int postId, int pageNo, int pageSize);
+        bool AddNewCommentForPost(int currentLoggedInUserId, UpdateCommentModel comment);
+
+        bool DeletePostCommentByPostId(int commentId, int currentUserId);
     }
 }

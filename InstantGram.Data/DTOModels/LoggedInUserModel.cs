@@ -44,10 +44,12 @@ namespace InstantGram.Data.DTOModels
             }
             set
             {
-                this.userId = value;
+                this.userId = value.ToDecrypt().ToString();
             }
         }
-        
+
         public string Token { get; set; }
+
+        public string UserAvatarLink { get; set; }
     }
 }
