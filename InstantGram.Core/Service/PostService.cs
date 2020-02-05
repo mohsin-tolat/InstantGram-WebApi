@@ -155,7 +155,7 @@ namespace InstantGram.Core.Service
 
         public bool DeletePostById(int currentLoggedInUserId, int postId)
         {
-            var postDetails = this.context.Post.Include(x => x.PostLike).FirstOrDefault(x => x.Id == postId && x.UploadByUserId == currentLoggedInUserId);
+            var postDetails = this.context.Post.Include(x => x.PostLike).Include(x => x.PostComment).Include("PostComment.CommentLike").FirstOrDefault(x => x.Id == postId && x.UploadByUserId == currentLoggedInUserId);
 
             if (postDetails == null)
             {
@@ -163,6 +163,8 @@ namespace InstantGram.Core.Service
             }
 
             this.DeletePostFromStorage(postDetails, this.appSettings.ApplicationDomainConfiguration.InstantGramApiUrl);
+            this.context.CommentLike.RemoveRange(postDetails.PostComment.SelectMany(x => x.CommentLike));
+            this.context.PostComment.RemoveRange(postDetails.PostComment);
             this.context.PostLike.RemoveRange(postDetails.PostLike);
             this.context.Post.Remove(postDetails);
             return this.context.SaveChanges() > 0;
