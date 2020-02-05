@@ -216,6 +216,7 @@ namespace InstantGram.Core.Service
         {
             var postComments = this.context.PostComment
                                                        .Include(x => x.Post)
+                                                       .Include(x => x.CommentLike)
                                                        .Where(x => x.PostId == postId)
                                                        .Select(comment => new CommentDto()
                                                        {
@@ -274,7 +275,7 @@ namespace InstantGram.Core.Service
 
         public bool DeletePostCommentByPostId(int commentId, int currentUserId)
         {
-            var postDetails = this.context.PostComment.Where(x => x.Id == commentId && x.CommentedByUserId == currentUserId).FirstOrDefault();
+            var postDetails = this.context.PostComment.Include(x => x.CommentLike).Where(x => x.Id == commentId && x.CommentedByUserId == currentUserId).FirstOrDefault();
             if (postDetails == null)
             {
                 return true;
@@ -284,6 +285,73 @@ namespace InstantGram.Core.Service
             this.context.PostComment.Remove(postDetails);
 
             return this.context.SaveChanges() > 0;
+        }
+
+        public CommentDto LikeDislikeComment(int currentUserId, int postId, string commentIdentifier)
+        {
+            var commentDetails = this.context.PostComment.Include(x => x.CommentLike)
+                                               .Include(x => x.CommentedByUser)
+                                               .Include(x => x.Post)
+                                               .Include(x => x.Post.UploadByUser)
+                                               .Where(x => x.Id == postId)
+                                               .OrderByDescending(comment => comment.CommentedOn)
+                                               .FirstOrDefault();
+
+            if (commentDetails == null)
+            {
+                return null;
+            }
+
+            if (!commentDetails.CommentLike.Any(x => x.LikeByUserId == currentUserId))
+            {
+                this.context.CommentLike.Add(new CommentLike()
+                {
+                    LikeByUserId = currentUserId,
+                    CommentId = postId,
+                    LikeOn = CommonUtilities.GetCurrentDateTime()
+                });
+            }
+            else
+            {
+                if (commentDetails.CommentLike.Any(x => x.LikeByUserId == currentUserId))
+                {
+                    this.context.CommentLike.RemoveRange(commentDetails.CommentLike.Where(x => x.LikeByUserId == currentUserId).ToList());
+                }
+            }
+
+            this.context.SaveChanges();
+
+            return new CommentDto()
+            {
+                CommentIdentifier = commentIdentifier,
+                Id = commentDetails.Id,
+                CommentedBy = new UserDto()
+                {
+                    Id = commentDetails.CommentedByUser.Id,
+                    FirstName = commentDetails.CommentedByUser.FirstName,
+                    LastName = commentDetails.CommentedByUser.LastName,
+                    Username = commentDetails.CommentedByUser.Username,
+                    EmailAddress = commentDetails.CommentedByUser.EmailAddress,
+                    DateOfJoining = commentDetails.CommentedByUser.DateOfJoining,
+                    UserAvatar = commentDetails.CommentedByUser.UserAvatar,
+                },
+                Content = commentDetails.CommentContent,
+                TotalCommentLikes = commentDetails.CommentLike.Count(),
+                IsCurrentUserComment = commentDetails.CommentedByUserId == currentUserId,
+                IsCurrentUserLikeComment = commentDetails.CommentLike.Any(x => x.LikeByUserId == currentUserId),
+                CommentedOn = commentDetails.CommentedOn,
+                PostDetails = new PostDto()
+                {
+                    Id = commentDetails.Post.Id,
+                    ContentLink = commentDetails.Post.ContentLink,
+                    TotalComments = commentDetails.Post.PostComment.Count(),
+                    TotalLikes = commentDetails.Post.PostLike.Count(),
+                    UploadBy = commentDetails.Post.UploadByUserId,
+                    UploadOn = commentDetails.Post.UploadOn,
+                    UploadedByUserName = commentDetails.Post.UploadByUser.Username,
+                    UploadedUserAvatar = commentDetails.Post.UploadByUser.UserAvatar,
+                }
+            };
         }
 
         private bool DeletePostFromStorage(Post postDetails, string currentUrl)

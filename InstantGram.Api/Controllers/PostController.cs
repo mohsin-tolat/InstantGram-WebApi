@@ -208,5 +208,28 @@ namespace InstantGram.Api.Controllers
             }
         }
 
+        [HttpPost("{commentHashId}/{commentIdentifier}")]
+        public IActionResult LikeDislikeComment(string commentHashId, string commentIdentifier)
+        {
+            try
+            {
+                var commentId = string.IsNullOrWhiteSpace(commentHashId) ? 0 : Convert.ToInt32(commentHashId.ToDecrypt());
+                var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
+                if (currentUserDetails.UserId == 0 || commentId == 0 || string.IsNullOrWhiteSpace(commentIdentifier))
+                {
+                    return BadRequest();
+                }
+
+                var response = this.postService.LikeDislikeComment(currentUserDetails.UserId, commentId, commentIdentifier);
+
+                return Ok(response);
+            }
+            catch (System.Exception ex)
+            {
+                this.logger.LogError(ex, "Error occurred in Like Dislike post.");
+                return BadRequest(new { message = "Something went wrong, Please Try again Later." });
+            }
+        }
+
     }
 }

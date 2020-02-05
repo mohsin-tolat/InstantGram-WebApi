@@ -24,5 +24,7 @@ namespace InstantGram.Core.Insterface
         bool AddNewCommentForPost(int currentLoggedInUserId, UpdateCommentModel comment);
 
         bool DeletePostCommentByPostId(int commentId, int currentUserId);
+
+        CommentDto LikeDislikeComment(int currentUserId, int commentId, string commentIdentifier);
     }
 }

@@ -57,5 +57,25 @@ namespace InstantGram.Data.DTOModels
         public bool IsCurrentUserLikeComment { get; set; }
 
         public bool IsCurrentUserComment { get; set; }
+
+        public string commentIdentidier { get; set; }
+
+        public string CommentIdentifier
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(commentIdentidier))
+                {
+                    this.commentIdentidier = CommonUtilities.GenerateRandomString();
+                    return this.commentIdentidier;
+                }
+
+                return this.commentIdentidier;
+            }
+            set
+            {
+                this.commentIdentidier = value;
+            }
+        }
     }
 }
