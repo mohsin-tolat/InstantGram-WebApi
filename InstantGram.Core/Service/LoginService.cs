@@ -35,7 +35,7 @@ namespace InstantGram.Core.Service
             }
 
             var passwordHash = CommonUtilities.GenerateHashPassword(password, userDetails.PasswordSalt);
-            
+
             if (userDetails.PasswordHash != passwordHash)
             {
                 return null;

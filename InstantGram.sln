@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantGram.Common.Domain",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantGram.Api.Test", "InstantGram.Api.Test\InstantGram.Api.Test.csproj", "{5D1AA4C6-7023-4C19-92AA-286573FA90B7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstantGram.Core.Test", "InstantGram.Core.Test\InstantGram.Core.Test.csproj", "{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,5 +102,17 @@ Global
 		{5D1AA4C6-7023-4C19-92AA-286573FA90B7}.Release|x64.Build.0 = Release|Any CPU
 		{5D1AA4C6-7023-4C19-92AA-286573FA90B7}.Release|x86.ActiveCfg = Release|Any CPU
 		{5D1AA4C6-7023-4C19-92AA-286573FA90B7}.Release|x86.Build.0 = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|x64.Build.0 = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Debug|x86.Build.0 = Debug|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|x64.ActiveCfg = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|x64.Build.0 = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|x86.ActiveCfg = Release|Any CPU
+		{6F72131C-4F07-4EF1-83B8-7C83DA761DD6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
