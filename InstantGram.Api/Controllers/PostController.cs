@@ -1,11 +1,12 @@
 using System;
+using System.Linq;
 using InstantGram.Common.Domain.Interface;
+using InstantGram.Common.Helper;
 using InstantGram.Core.Insterface;
+using InstantGram.Data.DTOModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using InstantGram.Common.Helper;
-using InstantGram.Data.DTOModels;
 using Microsoft.Extensions.Options;
 
 namespace InstantGram.Api.Controllers
@@ -30,7 +31,7 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllNewPosts([FromQuery] int pageNo = 1, [FromQuery]int pageSize = 10)
+        public IActionResult GetAllNewPosts([FromQuery] int pageNo = 1, [FromQuery] int pageSize = 10)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
             if (currentUserDetails.UserId > 0)
@@ -66,7 +67,7 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllOpenPosts([FromQuery]string userHashId = "", [FromQuery] int pageNo = 1, [FromQuery]int pageSize = 10)
+        public IActionResult GetAllOpenPosts([FromQuery] string userHashId = "", [FromQuery] int pageNo = 1, [FromQuery] int pageSize = 10)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
             var userId = string.IsNullOrWhiteSpace(userHashId) ? 0 : Convert.ToInt32(userHashId.ToDecrypt());
@@ -80,7 +81,7 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPostByHashId([FromQuery]string postHashId)
+        public IActionResult GetPostByHashId([FromQuery] string postHashId)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
             var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
@@ -95,10 +96,9 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        public IActionResult UploadPost([FromBody]UploadPostDto uploadPostDetails)
+        public IActionResult UploadPost([FromBody] UploadPostDto uploadPostDetails)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
-
 
             if (currentUserDetails.UserId <= 0 || string.IsNullOrWhiteSpace(uploadPostDetails.ImageContent))
             {
@@ -109,9 +109,8 @@ namespace InstantGram.Api.Controllers
             return Ok(isImageUploaded);
         }
 
-
         [HttpDelete]
-        public IActionResult DeletePostByHashId([FromQuery]string postHashId)
+        public IActionResult DeletePostByHashId([FromQuery] string postHashId)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
             var postId = string.IsNullOrWhiteSpace(postHashId) ? 0 : Convert.ToInt32(postHashId.ToDecrypt());
@@ -126,7 +125,7 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetCurrentUserPostsActivities([FromQuery] int pageNo = 1, [FromQuery]int pageSize = 20)
+        public IActionResult GetCurrentUserPostsActivities([FromQuery] int pageNo = 1, [FromQuery] int pageSize = 20)
         {
             var currentUserDetails = this.userResolverService.GetLoggedInUserDetails();
 
@@ -140,7 +139,7 @@ namespace InstantGram.Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPostCommentsByPostHashId([FromQuery] string postHashId, [FromQuery] int pageNo = 1, [FromQuery]int pageSize = 20)
+        public IActionResult GetPostCommentsByPostHashId([FromQuery] string postHashId, [FromQuery] int pageNo = 1, [FromQuery] int pageSize = 20)
         {
             try
             {
