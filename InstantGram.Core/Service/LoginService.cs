@@ -35,33 +35,34 @@ namespace InstantGram.Core.Service
             }
 
             var passwordHash = CommonUtilities.GenerateHashPassword(password, userDetails.PasswordSalt);
-            if (userDetails.PasswordHash == passwordHash)
+            
+            if (userDetails.PasswordHash != passwordHash)
             {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var symmetricSecurityKey = Encoding.ASCII.GetBytes(jwtSecretKey);
-
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, userDetails.Username),
-                    }),
-                    Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricSecurityKey), SecurityAlgorithms.HmacSha256)
-                };
-
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-
-                return new LoggedInUserModel()
-                {
-                    // UserId = userDetails.Id,
-                    Username = userDetails.Username,
-                    Token = tokenHandler.WriteToken(token),
-                    UserAvatarLink = userDetails.UserAvatar
-                };
+                return null;
             }
 
-            return null;
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var symmetricSecurityKey = Encoding.ASCII.GetBytes(jwtSecretKey);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                        new Claim(ClaimTypes.Name, userDetails.Username),
+                }),
+                Expires = DateTime.UtcNow.AddDays(7),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(symmetricSecurityKey), SecurityAlgorithms.HmacSha256)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return new LoggedInUserModel()
+            {
+                // UserId = userDetails.Id,
+                Username = userDetails.Username,
+                Token = tokenHandler.WriteToken(token),
+                UserAvatarLink = userDetails.UserAvatar
+            };
         }
     }
 }

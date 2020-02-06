@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using InstantGram.Api.Controllers;
 using InstantGram.Core.Insterface;
 using InstantGram.Data.DTOModels;
@@ -5,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace InstantGram.Api.Test.Controllers
@@ -32,7 +35,7 @@ namespace InstantGram.Api.Test.Controllers
         }
 
         [Fact]
-        public void Authenticate_Should_Return_AuthenticateModel_When_Authentication_Successful()
+        public void Authenticate_Should_Return_OKResult_AuthenticateModel_When_Authentication_Successful()
         {
             //Arrange
             this.mockLoginService.Setup(x => x.Authenticate(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new LoggedInUserModel()
@@ -53,6 +56,55 @@ namespace InstantGram.Api.Test.Controllers
             Assert.NotNull(loggedInUserDetails);
             Assert.Equal("TEST", loggedInUserDetails.Username);
             Assert.Equal("TEST", loggedInUserDetails.Token);
+        }
+
+        [Fact]
+        public void Authenticate_Should_Return_BadRequest_When_Authentication_FailedOrUserNotFound()
+        {
+            //Arrange
+            this.mockLoginService.Setup(x => x.Authenticate(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns((LoggedInUserModel)null);
+
+            //Act
+            var result = this.unitUnderTest.Authenticate(new Models.AuthenticateModel() { Username = "TEST", Password = "TET" });
+
+
+            //Assert
+            var badRequestObjectResult = result as BadRequestObjectResult;
+            Assert.NotNull(badRequestObjectResult);
+            var loggedInUserDetails = badRequestObjectResult.Value;
+            Assert.NotNull(loggedInUserDetails);
+        }
+
+        [Fact]
+        public void Authenticate_Should_Return_BadRequest_When_Authentication_ThrowsException()
+        {
+            //Arrange
+            this.mockLoginService.Setup(x => x.Authenticate(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Throws<NullReferenceException>();
+
+            //Act
+            var result = this.unitUnderTest.Authenticate(new Models.AuthenticateModel() { Username = "TEST", Password = "TET" });
+
+
+            //Assert
+            var badRequestObjectResult = result as BadRequestObjectResult;
+            Assert.NotNull(badRequestObjectResult);
+            var loggedInUserDetails = badRequestObjectResult.Value;
+            Assert.NotNull(loggedInUserDetails);
+        }
+
+        [Fact]
+        public void CheckAuthorization_Should_Return_OKResult_When_Authentication_Successful()
+        {
+
+            //Act
+            var result = this.unitUnderTest.CheckAuthorization();
+
+
+            //Assert
+            var okObjectResult = result as OkObjectResult;
+            Assert.NotNull(okObjectResult);
+            var isAuthorized = (bool)okObjectResult.Value;
+            Assert.True(isAuthorized);
         }
     }
 }
