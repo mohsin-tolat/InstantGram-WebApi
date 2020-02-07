@@ -29,16 +29,10 @@ pipeline {
 
     stage('Publish') {
       steps {
-        try {
         echo 'Publish Started'
         sh(script: 'dotnet publish InstantGram.sln -c release -r win10-x64 --self-contained -o App-Publish', returnStdout: true, returnStatus: true)
         echo 'Update Connection Strings'
         storeNewValue("Server=TESTSERVER\\SQLEXPRESS;Database=InstantGram_V001;User Id=sa;Password=India@TEST;")
-        }
-        catch (exc) {
-            echo 'Error Occurred in Publish Stage!'
-            echo exc
-        }
       }
     }
 
