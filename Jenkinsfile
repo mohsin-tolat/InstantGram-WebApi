@@ -20,7 +20,6 @@ pipeline {
         bat 'cd InstantGram.Api'
         echo 'Publish project'
         sh(script: 'dotnet publish InstantGram.sln -c release -r win10-x64 --self-contained -o App-Publish', returnStdout: true, returnStatus: true)
-        echo statusCode
       }
     }
 
