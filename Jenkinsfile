@@ -17,7 +17,9 @@ pipeline {
     stage('Publish') {
       steps {
         echo 'Publish Started'
-        sh 'dotnet publish -c release -r win10-x64 --self-contained true /p:useapphost=true'
+        bat 'cd InstantGram.Api'
+        echo 'Publish project'
+        sh 'dotnet publish -c release -r win10-x64 --self-contained /p:useapphost=true'
       }
     }
 
