@@ -19,7 +19,8 @@ pipeline {
         echo 'Publish Started'
         bat 'cd InstantGram.Api'
         echo 'Publish project'
-        sh(script: 'dotnet publish InstantGram.sln -c release -r win10-x64 --self-contained -o App-Publish', returnStdout: true)
+        def statusCode = sh(script: 'dotnet publish InstantGram.sln -c release -r win10-x64 --self-contained -o App-Publish', returnStdout: true, returnStatus:true)
+        echo 'StatusCode: ' statusCode
       }
     }
 
