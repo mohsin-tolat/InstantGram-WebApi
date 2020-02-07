@@ -19,7 +19,7 @@ pipeline {
         echo 'Publish Started'
         bat 'cd InstantGram.Api'
         echo 'Publish project'
-        sh 'dotnet publish -c release -r win10-x64 --self-contained /p:useapphost=true'
+        sh 'dotnet publish -c release -r win10-x64 --self-contained true /p:useapphost=true'
       }
     }
 
