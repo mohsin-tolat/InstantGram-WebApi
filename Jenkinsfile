@@ -1,15 +1,15 @@
-import groovy.json.JsonSlurper
-def cfg = ""
+// import groovy.json.JsonSlurper
+// def cfg = ""
 
 
-def storeNewValue(serverAdress) {
-    def json = new JsonSlurper()
-    echo "WORKSPACE_PATH: ${env.WORKSPACE}";
-    appSettings = json.parse(new File("${env.WORKSPACE}/App-Publish/appsettings.json"))
-    appSettings['ConnectionStrings'].InstantGramDbContext = serverAdress
-    cfg = appSettings
-    //return appSettings['ConnectionStrings'].ServerGateway
-} 
+// def storeNewValue(serverAdress) {
+//     def json = new JsonSlurper()
+//     echo "WORKSPACE_PATH: ${env.WORKSPACE}";
+//     appSettings = json.parse(new File("${env.WORKSPACE}/App-Publish/appsettings.json"))
+//     appSettings['ConnectionStrings'].InstantGramDbContext = serverAdress
+//     cfg = appSettings
+// //     return appSettings['ConnectionStrings'].ServerGateway
+// } 
 
 pipeline {
   agent any
@@ -31,8 +31,8 @@ pipeline {
       steps {
         echo 'Publish Started'
         sh(script: 'dotnet publish InstantGram.sln -c release -r win10-x64 --self-contained -o App-Publish', returnStdout: true, returnStatus: true)
-        echo 'Update Connection Strings'
-        storeNewValue("Server=TESTSERVER\\SQLEXPRESS;Database=InstantGram_V001;User Id=sa;Password=India@TEST;")
+        // echo 'Update Connection Strings'
+        // storeNewValue("Server=TESTSERVER\\SQLEXPRESS;Database=InstantGram_V001;User Id=sa;Password=India@TEST;")
       }
     }
 
