@@ -38,7 +38,6 @@ pipeline {
         catch (exc) {
             echo 'Error Occurred in Publish Stage!'
             echo exc
-            throw
         }
       }
     }
