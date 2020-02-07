@@ -42,11 +42,5 @@ pipeline {
         echo 'Here, all the Artifacts will be moved to server.'
       }
     }
-
-    stage('End') {
-      steps {
-        echo 'Deployment Done'
-      }
-    }
   }
 }

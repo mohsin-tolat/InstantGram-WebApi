@@ -99,6 +99,7 @@ namespace InstantGram.Api.Test.Controllers
             //Act
             var result = this.unitUnderTest.CheckAuthorization();
 
+            // TEST
 
             //Assert
             var okObjectResult = result as OkObjectResult;
