@@ -17,18 +17,14 @@ pipeline {
     stage('Publish') {
       steps {
         echo 'Publish Started'
+        sh 'dotnet publish --self-contained -r win10-x64 -o App-Publish'
       }
     }
 
     stage('Migration') {
       steps {
         echo 'Migration Started'
-      }
-    }
-
-    stage('Deploy') {
-      steps {
-        echo 'Deployment Started'
+        echo 'Here, all the Artifacts will be moved to server.'
       }
     }
 
