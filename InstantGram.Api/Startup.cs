@@ -37,6 +37,16 @@ namespace InstantGram.Api
             services.Configure<AppSettings>(appSettingsSection);
             services.ConfigureJwtAuthentication(appSettingsSection);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+                {
+                    Version = "v1",
+                    Title = "InstantGram.Api",
+                    Description = "Testing"
+                });
+            });
+
             services.ConfigureDependency(Configuration);
         }
 
@@ -52,6 +62,14 @@ namespace InstantGram.Api
 
             // app.UseHttpsRedirection();
 
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "InstantGram.Api");
+            });
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -61,6 +79,8 @@ namespace InstantGram.Api
             {
                 endpoints.MapControllers();
             });
+
+
 
             app.UseStaticFiles();
             app.UseStaticFiles(new StaticFileOptions()
