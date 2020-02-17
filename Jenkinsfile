@@ -1,33 +1,20 @@
-// import groovy.json.JsonSlurper
-// def cfg = ""
-
-
-// def storeNewValue(serverAdress) {
-//     def json = new JsonSlurper()
-//     echo "WORKSPACE_PATH: ${env.WORKSPACE}";
-//     appSettings = json.parse(new File("${env.WORKSPACE}/App-Publish/appsettings.json"))
-//     appSettings['ConnectionStrings'].InstantGramDbContext = serverAdress
-//     cfg = appSettings
-// //     return appSettings['ConnectionStrings'].ServerGateway
-// } 
-
 pipeline {
   agent any
+  // parameters {
+  //       string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
+  //       text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+  //       booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+  //       choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+  //       password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+  //   } 
   parameters {
-        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-
-        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
-
-        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
-
-        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
-
-        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
-    } 
+    choice(name: 'BuildType', choices: ['Development', 'QA', 'UAT', 'Production'], description: 'Select Build Type to generate package for configurations.')
+  }
   stages {
     stage('Build') {
       steps {
         echo 'Build Started'
+        echo 'Built Type: ${params.BuildType}'
         sh(script:  'dotnet build', returnStdout: true, returnStatus: true)
       }
     }
