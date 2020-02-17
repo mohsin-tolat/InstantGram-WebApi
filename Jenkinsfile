@@ -13,6 +13,8 @@
 
 pipeline {
   agent any
+  properties([parameters([choice(choices: ['Development', 'QA', 'UAT', 'Production'], description: 'Build type of which the package will be generated and operate on.', name: 'Build Type')])])
+])
   stages {
     stage('Build') {
       steps {
