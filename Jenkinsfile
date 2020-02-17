@@ -13,14 +13,13 @@
 
 pipeline {
   agent any
-  options(
-    [
-      [$class: 'JiraProjectProperty'], 
-      parameters(
-        [choice(choices: ['Development', 'QA', 'UAT', 'Production'], description: 'Build type of which the package will be generated and operate on.', name: 'Build Type')]
-      )
-    ]
-  )
+  properties([
+  parameters([
+    string(name: 'submodule', defaultValue: ''),
+    string(name: 'submodule_branch', defaultValue: ''),
+    string(name: 'commit_sha', defaultValue: ''),
+  ])
+])
   stages {
     stage('Build') {
       steps {
