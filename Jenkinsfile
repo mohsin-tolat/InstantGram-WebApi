@@ -31,7 +31,8 @@ pipeline {
         }
         stage('Migration') {
             steps {
-                archiveArtifacts artifacts: 'App-Publish/*.*', onlyIfSuccessful: true
+                zip zipFile: 'Published.zip', archive: false, dir: 'App-Publish'
+                archiveArtifacts artifacts: 'Published.zip', fingerprint: true
             }
         }
         stage('Deployment') {
